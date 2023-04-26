@@ -1,0 +1,1060 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Knowledge Graph Index" href="kg.html" /><link rel="prev" title="Base Vector Index class" href="vector_stores/base_index.html" />
+        <link rel="canonical" href="https://gpt-index.readthedocs.io/en/latest/reference/indices/struct_store.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
+        <title>Structured Store Index - LlamaIndex</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="/_/static/css/badge_only.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style>
+<!-- RTD Extra Head -->
+
+<link rel="stylesheet" href="/_/static/css/readthedocs-doc-embed.css" type="text/css" />
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2023-04-17T00:50:54Z", "builder": "sphinx", "canonical_url": null, "commit": "9e4d0e9f", "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "reference/indices/struct_store", "programming_language": "words", "project": "gpt-index", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "furo", "user_analytics_code": "", "version": "stable"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+<script type="text/javascript" src="/_/static/javascript/readthedocs-analytics.js" async="async"></script>
+
+<!-- end RTD <extrahead> -->
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">LlamaIndex</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">LlamaIndex</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">Installation and Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/starter_example.html">Starter Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../guides/primer.html">A Primer to using LlamaIndex</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/primer/usage_pattern.html">LlamaIndex Usage Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/primer/index_guide.html">How Each Index Works</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../guides/tutorials.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/tutorials/building_a_chatbot.html">💬🤖 How to Build a Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/tutorials/fullstack_app_guide.html">A Guide to Building a Full-Stack Web App with LLamaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/tutorials/sql_guide.html">A Guide to LlamaIndex + Structured Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/tutorials/terms_definitions_tutorial.html">A Guide to Extracting Terms and Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/tutorials/graph.html">A Guide to Creating a Unified Query Framework over your Indexes</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://medium.com/@jerryjliu98/how-unstructured-and-llamaindex-can-help-bring-the-power-of-llms-to-your-own-data-3657d063e30d">SEC 10k Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/notebooks.html">Notebooks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Use Cases</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../use_cases/queries.html">Queries over your Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../use_cases/apps.html">Integrations into LLM Applications</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Key Components</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to/data_connectors.html">Data Connectors (LlamaHub 🦙)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/indices.html">Index Structures</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/primer/index_guide.html">How Each Index Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/update.html">Updating an Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/composability.html">Composability</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/query_interface.html">Query Interface</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/primer/usage_pattern.html">LlamaIndex Usage Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/composability.html">Composability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/query/query_transformations.html">Query Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/query/node_postprocessor.html">Node Postprocessor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/customization.html">Customization</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/custom_llms.html">Defining LLMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/custom_prompts.html">Defining Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/embeddings.html">Embedding support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/analysis.html">Analysis and Optimization</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/cost_analysis.html">Cost Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/playground.html">Playground</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/optimizers.html">Optimizers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to/output_parsing.html">Output Parsing</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/integrations.html">Integrations</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/vector_stores.html">Using Vector Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/chatgpt_plugins.html">ChatGPT Plugin Integrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/using_with_langchain.html">Using with Langchain 🦜🔗</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../indices.html">Indices</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="list.html">List Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">Table Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tree.html">Tree Index</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="vector_store.html">Vector Store Index</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="vector_stores/stores.html">Vector Stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vector_stores/base_index.html">Base Vector Index class</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Structured Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kg.html">Knowledge Graph Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="empty.html">Empty Index</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../query.html">Querying an Index</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="list_query.html">Querying a List Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="table_query.html">Querying a Keyword Table Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tree_query.html">Querying a Tree Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vector_store_query.html">Querying a Vector Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_store_query.html">Querying a Structured Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kg_query.html">Querying a Knowledge Graph Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="empty_query.html">Querying an Empty Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="composability_query.html">Composable Queries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../node.html">Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_postprocessor.html">Node Postprocessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docstore.html">Docstore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../composability.html">Composability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readers.html">Data Connectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../prompts.html">Prompt Templates</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../service_context.html">Service Context</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../service_context/embeddings.html">Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../service_context/llm_predictor.html">LLMPredictor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../service_context/prompt_helper.html">PromptHelper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../service_context/llama_logger.html">Llama Logger 🪵</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../struct_store.html">Structured Index Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../response.html">Response</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playground.html">Playground</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_parser.html">Node Parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../langchain_integrations/base.html">Langchain Integrations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/app_showcase.html">😎 App Showcase</a></li>
+</ul>
+
+</div>
+
+<div
+  id="furo-sidebar-ad-placement"
+  class="flat"
+  data-ea-publisher="readthedocs"
+  data-ea-type="readthedocs-sidebar"
+  data-ea-manual="true"
+></div>
+</div>
+
+<div id="furo-readthedocs-versions" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" tabindex="0">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book">&nbsp;</span>
+    v: stable
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Versions</dt>
+      
+        <dd><a href="/en/latest/">latest</a></dd>
+      
+        <dd><a href="/en/stable/">stable</a></dd>
+      
+    </dl>
+    <dl>
+      <dt>Downloads</dt>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/pdf/">pdf</a></dd>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/htmlzip/">html</a></dd>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/epub/">epub</a></dd>
+      
+    </dl>
+    <dl>
+      
+      <dt>On Read the Docs</dt>
+        <dd>
+          <a href="//readthedocs.org/projects/gpt-index/?fromdocs=gpt-index">Project Home</a>
+        </dd>
+        <dd>
+          <a href="//readthedocs.org/builds/gpt-index/?fromdocs=gpt-index">Builds</a>
+        </dd>
+    </dl>
+  </div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+  
+  <div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/jerryjliu/gpt_index/edit/9e4d0e9faa6cba99d9baa95321427007cea7e70f/docs/reference/indices/struct_store.rst" title="Edit this page">
+    <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+      <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+    </svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="section" id="module-gpt_index.indices.struct_store">
+<span id="structured-store-index"></span><span id="ref-indices-structstore"></span><h1>Structured Store Index<a class="headerlink" href="#module-gpt_index.indices.struct_store" title="Permalink to this heading"></a></h1>
+<p>Structured store indices.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTNLPandasIndexQuery">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gpt_index.indices.struct_store.</span></span><span class="sig-name descname"><span class="pre">GPTNLPandasIndexQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_struct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PandasStructTable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instruction_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_processor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pandas_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../prompts.html#gpt_index.prompts.prompts.PandasPrompt" title="gpt_index.prompts.prompts.PandasPrompt"><span class="pre">PandasPrompt</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTNLPandasIndexQuery" title="Permalink to this definition"></a></dt>
+<dd><p>GPT Pandas query.</p>
+<p>Convert natural language to Pandas python code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;&lt;query_str&gt;&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Pandas dataframe to use.</p></li>
+<li><p><strong>instruction_str</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Instruction string to use.</p></li>
+<li><p><strong>output_processor</strong> (<em>Optional</em><em>[</em><em>Callable</em><em>[</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Output processor.
+A callable that takes in the output string, pandas DataFrame,
+and any output kwargs and returns a string.</p></li>
+<li><p><strong>pandas_prompt</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="../prompts.html#gpt_index.prompts.prompts.PandasPrompt" title="gpt_index.prompts.prompts.PandasPrompt"><em>PandasPrompt</em></a><em>]</em>) – Pandas prompt to use.</p></li>
+<li><p><strong>head</strong> (<em>int</em>) – Number of rows to show in the table context.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTNLPandasIndexQuery.retrieve">
+<span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_bundle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../node.html#gpt_index.data_structs.node_v2.NodeWithScore" title="gpt_index.data_structs.node_v2.NodeWithScore"><span class="pre">NodeWithScore</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTNLPandasIndexQuery.retrieve" title="Permalink to this definition"></a></dt>
+<dd><p>Get list of tuples of node and similarity for response.</p>
+<p>First part of the tuple is the node.
+Second part of tuple is the distance from query to the node.
+If not applicable, it’s None.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTNLStructStoreIndexQuery">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gpt_index.indices.struct_store.</span></span><span class="sig-name descname"><span class="pre">GPTNLStructStoreIndexQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_struct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SQLStructTable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../struct_store.html#gpt_index.langchain_helpers.sql_wrapper.SQLDatabase" title="gpt_index.langchain_helpers.sql_wrapper.SQLDatabase"><span class="pre">SQLDatabase</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_context_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">SQLContextContainer</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_doc_id_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_to_sql_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../prompts.html#gpt_index.prompts.prompts.TextToSQLPrompt" title="gpt_index.prompts.prompts.TextToSQLPrompt"><span class="pre">TextToSQLPrompt</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_query_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryMode" title="gpt_index.indices.query.schema.QueryMode"><span class="pre">QueryMode</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QueryMode.DEFAULT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_query_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTNLStructStoreIndexQuery" title="Permalink to this definition"></a></dt>
+<dd><p>GPT natural language query over a structured database.</p>
+<p>Given a natural language query, we will extract the query to SQL.
+Runs raw SQL over a GPTSQLStructStoreIndex. No LLM calls are made during
+the SQL execution.
+NOTE: this query cannot work with composed indices - if the index
+contains subindices, those subindices will not be queried.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;&lt;query_str&gt;&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTNLStructStoreIndexQuery.retrieve">
+<span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_bundle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../node.html#gpt_index.data_structs.node_v2.NodeWithScore" title="gpt_index.data_structs.node_v2.NodeWithScore"><span class="pre">NodeWithScore</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTNLStructStoreIndexQuery.retrieve" title="Permalink to this definition"></a></dt>
+<dd><p>Get list of tuples of node and similarity for response.</p>
+<p>First part of the tuple is the node.
+Second part of tuple is the distance from query to the node.
+If not applicable, it’s None.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gpt_index.indices.struct_store.</span></span><span class="sig-name descname"><span class="pre">GPTPandasIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../node.html#gpt_index.data_structs.node_v2.Node" title="gpt_index.data_structs.node_v2.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_struct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">PandasStructTable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Base GPT Pandas Index.</p>
+<p>The GPTPandasStructStoreIndex is an index that stores
+a Pandas dataframe under the hood.
+Currently index “construction” is not supported.</p>
+<p>During query time, the user can either specify a raw SQL query
+or a natural language query to retrieve their data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pandas_df</strong> (<em>Optional</em><em>[</em><em>pd.DataFrame</em><em>]</em>) – Pandas dataframe to use.
+See <a class="reference internal" href="../struct_store.html#ref-struct-store"><span class="std std-ref">Structured Index Configuration</span></a> for more details.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.aquery">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aquery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QueryMode.DEFAULT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseQueryTransform</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">query_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../response.html#gpt_index.response.schema.Response" title="gpt_index.response.schema.Response"><span class="pre">Response</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../response.html#gpt_index.response.schema.StreamingResponse" title="gpt_index.response.schema.StreamingResponse"><span class="pre">StreamingResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.aquery" title="Permalink to this definition"></a></dt>
+<dd><p>Asynchronously answer a query.</p>
+<p>When <cite>query</cite> is called, we query the index with the given <cite>mode</cite> and
+<cite>query_kwargs</cite>. The <cite>mode</cite> determines the type of query to run, and
+<cite>query_kwargs</cite> are parameters that are specific to the query type.</p>
+<p>For a comprehensive documentation of available <cite>mode</cite> and <cite>query_kwargs</cite> to
+query a given index, please visit <a class="reference internal" href="../query.html#ref-query"><span class="std std-ref">Querying an Index</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.from_documents">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docstore</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../docstore.html#gpt_index.docstore.DocumentStore" title="gpt_index.docstore.DocumentStore"><span class="pre">DocumentStore</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../service_context.html#gpt_index.indices.service_context.ServiceContext" title="gpt_index.indices.service_context.ServiceContext"><span class="pre">ServiceContext</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.from_documents" title="Permalink to this definition"></a></dt>
+<dd><p>Create index from documents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>documents</strong> (<em>Optional</em><em>[</em><em>Sequence</em><em>[</em><em>BaseDocument</em><em>]</em><em>]</em>) – List of documents to
+build the index from.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.get_query_map">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_query_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../query.html#gpt_index.indices.query.base.BaseGPTIndexQuery" title="gpt_index.indices.query.base.BaseGPTIndexQuery"><span class="pre">BaseGPTIndexQuery</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.get_query_map" title="Permalink to this definition"></a></dt>
+<dd><p>Get query map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">insert_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.insert" title="Permalink to this definition"></a></dt>
+<dd><p>Insert a document.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.load_from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.load_from_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Load index from dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.load_from_disk">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_disk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.load_from_disk" title="Permalink to this definition"></a></dt>
+<dd><p>Load index from disk.</p>
+<p>This method loads the index from a JSON file stored on disk. The index data
+structure itself is preserved completely. If the index is defined over
+subindices, those subindices will also be preserved (and subindices of
+those subindices, etc.).</p>
+<p>NOTE: load_from_disk should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_disk</cite> and <cite>load_from_disk</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>save_path</strong> (<em>str</em>) – The save_path of the file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The loaded index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex">BaseGPTIndex</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.load_from_string">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.load_from_string" title="Permalink to this definition"></a></dt>
+<dd><p>Load index from string (in JSON-format).</p>
+<p>This method loads the index from a JSON string. The index data
+structure itself is preserved completely. If the index is defined over
+subindices, those subindices will also be preserved (and subindices of
+those subindices, etc.).</p>
+<p>NOTE: load_from_string should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_string</cite> and <cite>load_from_string</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index_string</strong> (<em>str</em>) – The index string (in JSON-format).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The loaded index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex">BaseGPTIndex</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QueryMode.DEFAULT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseQueryTransform</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_async</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">query_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../response.html#gpt_index.response.schema.Response" title="gpt_index.response.schema.Response"><span class="pre">Response</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../response.html#gpt_index.response.schema.StreamingResponse" title="gpt_index.response.schema.StreamingResponse"><span class="pre">StreamingResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.query" title="Permalink to this definition"></a></dt>
+<dd><p>Answer a query.</p>
+<p>When <cite>query</cite> is called, we query the index with the given <cite>mode</cite> and
+<cite>query_kwargs</cite>. The <cite>mode</cite> determines the type of query to run, and
+<cite>query_kwargs</cite> are parameters that are specific to the query type.</p>
+<p>For a comprehensive documentation of available <cite>mode</cite> and <cite>query_kwargs</cite> to
+query a given index, please visit <a class="reference internal" href="../query.html#ref-query"><span class="std std-ref">Querying an Index</span></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.query_context">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.query_context" title="Permalink to this definition"></a></dt>
+<dd><p>Additional context necessary for making a query.</p>
+<p>This should capture any index-specific clients, services, etc,
+that’s not captured by index struct, docstore, and service context.
+For example, a vector store index would pass vector store.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">update_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.refresh" title="Permalink to this definition"></a></dt>
+<dd><p>Refresh an index with documents that have changed.</p>
+<p>This allows users to save LLM and Embedding model calls, while only
+updating documents that have any changes in text or extra_info. It
+will also insert any documents that previously were not stored.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.save_to_dict">
+<span class="sig-name descname"><span class="pre">save_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">save_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.save_to_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Save to dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.save_to_disk">
+<span class="sig-name descname"><span class="pre">save_to_disk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ascii'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">save_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.save_to_disk" title="Permalink to this definition"></a></dt>
+<dd><p>Save to file.</p>
+<p>This method stores the index into a JSON file stored on disk.</p>
+<p>NOTE: save_to_disk should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_disk</cite> and <cite>load_from_disk</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_path</strong> (<em>str</em>) – The save_path of the file.</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>) – The encoding of the file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.save_to_string">
+<span class="sig-name descname"><span class="pre">save_to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">save_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.save_to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Save to string.</p>
+<p>This method stores the index into a JSON string.</p>
+<p>NOTE: save_to_string should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_string</cite> and <cite>load_from_string</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The JSON string of the index.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTPandasIndex.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">update_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTPandasIndex.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update a document.</p>
+<p>This is equivalent to deleting the document and then inserting it again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>Union</em><em>[</em><em>BaseDocument</em><em>, </em><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><em>BaseGPTIndex</em></a><em>]</em>) – document to update</p></li>
+<li><p><strong>insert_kwargs</strong> (<em>Dict</em>) – kwargs to pass to insert</p></li>
+<li><p><strong>delete_kwargs</strong> (<em>Dict</em>) – kwargs to pass to delete</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gpt_index.indices.struct_store.</span></span><span class="sig-name descname"><span class="pre">GPTSQLStructStoreIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../node.html#gpt_index.data_structs.node_v2.Node" title="gpt_index.data_structs.node_v2.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_struct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">SQLStructTable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../service_context.html#gpt_index.indices.service_context.ServiceContext" title="gpt_index.indices.service_context.ServiceContext"><span class="pre">ServiceContext</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../struct_store.html#gpt_index.langchain_helpers.sql_wrapper.SQLDatabase" title="gpt_index.langchain_helpers.sql_wrapper.SQLDatabase"><span class="pre">SQLDatabase</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Table</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_doc_id_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_context_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">SQLContextContainer</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Base GPT SQL Struct Store Index.</p>
+<p>The GPTSQLStructStoreIndex is an index that uses a SQL database
+under the hood. During index construction, the data can be inferred
+from unstructured documents given a schema extract prompt,
+or it can be pre-loaded in the database.</p>
+<p>During query time, the user can either specify a raw SQL query
+or a natural language query to retrieve their data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> (<em>Optional</em><em>[</em><em>Sequence</em><em>[</em><em>DOCUMENTS_INPUT</em><em>]</em><em>]</em>) – Documents to index.
+NOTE: in the SQL index, this is an optional field.</p></li>
+<li><p><strong>sql_database</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="../struct_store.html#gpt_index.langchain_helpers.sql_wrapper.SQLDatabase" title="gpt_index.langchain_helpers.sql_wrapper.SQLDatabase"><em>SQLDatabase</em></a><em>]</em>) – SQL database to use,
+including table names to specify.
+See <a class="reference internal" href="../struct_store.html#ref-struct-store"><span class="std std-ref">Structured Index Configuration</span></a> for more details.</p></li>
+<li><p><strong>table_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Name of the table to use
+for extracting data.
+Either table_name or table must be specified.</p></li>
+<li><p><strong>table</strong> (<em>Optional</em><em>[</em><em>Table</em><em>]</em>) – SQLAlchemy Table object to use.
+Specifying the Table object explicitly, instead of
+the table name, allows you to pass in a view.
+Either table_name or table must be specified.</p></li>
+<li><p><strong>sql_context_container</strong> (<em>Optional</em><em>[</em><em>SQLContextContainer</em><em>]</em>) – SQL context container.
+an be generated from a SQLContextContainerBuilder.
+See <a class="reference internal" href="../struct_store.html#ref-struct-store"><span class="std std-ref">Structured Index Configuration</span></a> for more details.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.aquery">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aquery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QueryMode.DEFAULT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseQueryTransform</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">query_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../response.html#gpt_index.response.schema.Response" title="gpt_index.response.schema.Response"><span class="pre">Response</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../response.html#gpt_index.response.schema.StreamingResponse" title="gpt_index.response.schema.StreamingResponse"><span class="pre">StreamingResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.aquery" title="Permalink to this definition"></a></dt>
+<dd><p>Asynchronously answer a query.</p>
+<p>When <cite>query</cite> is called, we query the index with the given <cite>mode</cite> and
+<cite>query_kwargs</cite>. The <cite>mode</cite> determines the type of query to run, and
+<cite>query_kwargs</cite> are parameters that are specific to the query type.</p>
+<p>For a comprehensive documentation of available <cite>mode</cite> and <cite>query_kwargs</cite> to
+query a given index, please visit <a class="reference internal" href="../query.html#ref-query"><span class="std std-ref">Querying an Index</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.from_documents">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docstore</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../docstore.html#gpt_index.docstore.DocumentStore" title="gpt_index.docstore.DocumentStore"><span class="pre">DocumentStore</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../service_context.html#gpt_index.indices.service_context.ServiceContext" title="gpt_index.indices.service_context.ServiceContext"><span class="pre">ServiceContext</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.from_documents" title="Permalink to this definition"></a></dt>
+<dd><p>Create index from documents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>documents</strong> (<em>Optional</em><em>[</em><em>Sequence</em><em>[</em><em>BaseDocument</em><em>]</em><em>]</em>) – List of documents to
+build the index from.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.get_query_map">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_query_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../query.html#gpt_index.indices.query.base.BaseGPTIndexQuery" title="gpt_index.indices.query.base.BaseGPTIndexQuery"><span class="pre">BaseGPTIndexQuery</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.get_query_map" title="Permalink to this definition"></a></dt>
+<dd><p>Get query map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">insert_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.insert" title="Permalink to this definition"></a></dt>
+<dd><p>Insert a document.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Load index from dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_disk">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_disk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_disk" title="Permalink to this definition"></a></dt>
+<dd><p>Load index from disk.</p>
+<p>This method loads the index from a JSON file stored on disk. The index data
+structure itself is preserved completely. If the index is defined over
+subindices, those subindices will also be preserved (and subindices of
+those subindices, etc.).</p>
+<p>NOTE: load_from_disk should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_disk</cite> and <cite>load_from_disk</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>save_path</strong> (<em>str</em>) – The save_path of the file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The loaded index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex">BaseGPTIndex</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_string">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_string" title="Permalink to this definition"></a></dt>
+<dd><p>Load index from string (in JSON-format).</p>
+<p>This method loads the index from a JSON string. The index data
+structure itself is preserved completely. If the index is defined over
+subindices, those subindices will also be preserved (and subindices of
+those subindices, etc.).</p>
+<p>NOTE: load_from_string should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_string</cite> and <cite>load_from_string</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index_string</strong> (<em>str</em>) – The index string (in JSON-format).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The loaded index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex">BaseGPTIndex</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QueryMode.DEFAULT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseQueryTransform</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_async</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">query_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../response.html#gpt_index.response.schema.Response" title="gpt_index.response.schema.Response"><span class="pre">Response</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../response.html#gpt_index.response.schema.StreamingResponse" title="gpt_index.response.schema.StreamingResponse"><span class="pre">StreamingResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.query" title="Permalink to this definition"></a></dt>
+<dd><p>Answer a query.</p>
+<p>When <cite>query</cite> is called, we query the index with the given <cite>mode</cite> and
+<cite>query_kwargs</cite>. The <cite>mode</cite> determines the type of query to run, and
+<cite>query_kwargs</cite> are parameters that are specific to the query type.</p>
+<p>For a comprehensive documentation of available <cite>mode</cite> and <cite>query_kwargs</cite> to
+query a given index, please visit <a class="reference internal" href="../query.html#ref-query"><span class="std std-ref">Querying an Index</span></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.query_context">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.query_context" title="Permalink to this definition"></a></dt>
+<dd><p>Additional context necessary for making a query.</p>
+<p>This should capture any index-specific clients, services, etc,
+that’s not captured by index struct, docstore, and service context.
+For example, a vector store index would pass vector store.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">update_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.refresh" title="Permalink to this definition"></a></dt>
+<dd><p>Refresh an index with documents that have changed.</p>
+<p>This allows users to save LLM and Embedding model calls, while only
+updating documents that have any changes in text or extra_info. It
+will also insert any documents that previously were not stored.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_dict">
+<span class="sig-name descname"><span class="pre">save_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">save_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Save to dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_disk">
+<span class="sig-name descname"><span class="pre">save_to_disk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ascii'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">save_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_disk" title="Permalink to this definition"></a></dt>
+<dd><p>Save to file.</p>
+<p>This method stores the index into a JSON file stored on disk.</p>
+<p>NOTE: save_to_disk should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_disk</cite> and <cite>load_from_disk</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_path</strong> (<em>str</em>) – The save_path of the file.</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>) – The encoding of the file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_string">
+<span class="sig-name descname"><span class="pre">save_to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">save_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Save to string.</p>
+<p>This method stores the index into a JSON string.</p>
+<p>NOTE: save_to_string should not be used for indices composed on top
+of other indices. Please define a <cite>ComposableGraph</cite> and use
+<cite>save_to_string</cite> and <cite>load_from_string</cite> on that instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The JSON string of the index.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndex.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../readers.html#gpt_index.readers.Document" title="gpt_index.readers.schema.base.Document"><span class="pre">Document</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">update_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update a document.</p>
+<p>This is equivalent to deleting the document and then inserting it again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>Union</em><em>[</em><em>BaseDocument</em><em>, </em><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><em>BaseGPTIndex</em></a><em>]</em>) – document to update</p></li>
+<li><p><strong>insert_kwargs</strong> (<em>Dict</em>) – kwargs to pass to insert</p></li>
+<li><p><strong>delete_kwargs</strong> (<em>Dict</em>) – kwargs to pass to delete</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndexQuery">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gpt_index.indices.struct_store.</span></span><span class="sig-name descname"><span class="pre">GPTSQLStructStoreIndexQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_struct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SQLStructTable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../struct_store.html#gpt_index.langchain_helpers.sql_wrapper.SQLDatabase" title="gpt_index.langchain_helpers.sql_wrapper.SQLDatabase"><span class="pre">SQLDatabase</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_context_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">SQLContextContainer</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndexQuery" title="Permalink to this definition"></a></dt>
+<dd><p>GPT SQL query over a structured database.</p>
+<p>Runs raw SQL over a GPTSQLStructStoreIndex. No LLM calls are made here.
+NOTE: this query cannot work with composed indices - if the index
+contains subindices, those subindices will not be queried.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;&lt;query_str&gt;&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;sql&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.GPTSQLStructStoreIndexQuery.retrieve">
+<span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_bundle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../node.html#gpt_index.data_structs.node_v2.NodeWithScore" title="gpt_index.data_structs.node_v2.NodeWithScore"><span class="pre">NodeWithScore</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndexQuery.retrieve" title="Permalink to this definition"></a></dt>
+<dd><p>Get list of tuples of node and similarity for response.</p>
+<p>First part of the tuple is the node.
+Second part of tuple is the distance from query to the node.
+If not applicable, it’s None.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.SQLContextContainerBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gpt_index.indices.struct_store.</span></span><span class="sig-name descname"><span class="pre">SQLContextContainerBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../struct_store.html#gpt_index.langchain_helpers.sql_wrapper.SQLDatabase" title="gpt_index.langchain_helpers.sql_wrapper.SQLDatabase"><span class="pre">SQLDatabase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder" title="Permalink to this definition"></a></dt>
+<dd><p>SQLContextContainerBuilder.</p>
+<p>Build a SQLContextContainer that can be passed to the SQL index
+during index construction or during queryt-time.</p>
+<p>NOTE: if context_str is specified, that will be used as context
+instead of context_dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sql_database</strong> (<a class="reference internal" href="../struct_store.html#gpt_index.langchain_helpers.sql_wrapper.SQLDatabase" title="gpt_index.langchain_helpers.sql_wrapper.SQLDatabase"><em>SQLDatabase</em></a>) – SQL database</p></li>
+<li><p><strong>context_dict</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – context dict</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.SQLContextContainerBuilder.build_context_container">
+<span class="sig-name descname"><span class="pre">build_context_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ignore_db_schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">SQLContextContainer</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.build_context_container" title="Permalink to this definition"></a></dt>
+<dd><p>Build index structure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.SQLContextContainerBuilder.derive_index_from_context">
+<span class="sig-name descname"><span class="pre">derive_index_from_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_db_schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">index_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.derive_index_from_context" title="Permalink to this definition"></a></dt>
+<dd><p>Derive index from context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.SQLContextContainerBuilder.from_documents">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseDocument</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../struct_store.html#gpt_index.langchain_helpers.sql_wrapper.SQLDatabase" title="gpt_index.langchain_helpers.sql_wrapper.SQLDatabase"><span class="pre">SQLDatabase</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">context_builder_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../struct_store.html#gpt_index.indices.struct_store.container_builder.SQLContextContainerBuilder" title="gpt_index.indices.struct_store.container_builder.SQLContextContainerBuilder"><span class="pre">SQLContextContainerBuilder</span></a></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.from_documents" title="Permalink to this definition"></a></dt>
+<dd><p>Build context from documents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gpt_index.indices.struct_store.SQLContextContainerBuilder.query_index_for_context">
+<span class="sig-name descname"><span class="pre">query_index_for_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><span class="pre">BaseGPTIndex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><span class="pre">QueryBundle</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_tmpl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Please</span> <span class="pre">return</span> <span class="pre">the</span> <span class="pre">relevant</span> <span class="pre">tables</span> <span class="pre">(including</span> <span class="pre">the</span> <span class="pre">full</span> <span class="pre">schema)</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">following</span> <span class="pre">query:</span> <span class="pre">{orig_query_str}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_context_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">index_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.query_index_for_context" title="Permalink to this definition"></a></dt>
+<dd><p>Query index for context.</p>
+<p>A simple wrapper around the index.query call which
+injects a query template to specifically fetch table information,
+and can store a context_str.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<a class="reference internal" href="../indices.html#gpt_index.indices.base.BaseGPTIndex" title="gpt_index.indices.base.BaseGPTIndex"><em>BaseGPTIndex</em></a>) – index data structure</p></li>
+<li><p><strong>query_str</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="../query.html#gpt_index.indices.query.schema.QueryBundle" title="gpt_index.indices.query.schema.QueryBundle"><em>QueryBundle</em></a><em>]</em>) – query string</p></li>
+<li><p><strong>query_tmpl</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – query template</p></li>
+<li><p><strong>store_context_str</strong> (<em>bool</em>) – store context_str</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="kg.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Knowledge Graph Index</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="vector_stores/base_index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Base Vector Index class</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Jerry Liu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link" href="https://readthedocs.org/projects/gpt-index" aria-label="On Read the Docs">
+                <svg x="0px" y="0px" viewBox="-125 217 360 360" xml:space="preserve">
+                  <path fill="currentColor" d="M39.2,391.3c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3 c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2 c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,391.3,40.4,391.1,39.2,391.3z M39.2,353.6c-4.2,0.6-7.1,4.4-6.5,8.5 c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4 c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,353.6,40.4,353.4,39.2,353.6z M39.2,315.9 c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8 c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9 C41.7,315.9,40.4,315.8,39.2,315.9z M39.2,278.3c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7 c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6 c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,278.2,40.4,278.1,39.2,278.3z M-13.6,238.5c-39.6,0.3-54.3,12.5-54.3,12.5v295.7 c0,0,14.4-12.4,60.8-10.5s55.9,18.2,112.9,19.3s71.3-8.8,71.3-8.8l0.8-301.4c0,0-25.6,7.3-75.6,7.7c-49.9,0.4-61.9-12.7-107.7-14.2 C-8.2,238.6-10.9,238.5-13.6,238.5z M19.5,257.8c0,0,24,7.9,68.3,10.1c37.5,1.9,75-3.7,75-3.7v267.9c0,0-19,10-66.5,6.6 C59.5,536.1,19,522.1,19,522.1L19.5,257.8z M-3.6,264.8c4.2,0,7.7,3.4,7.7,7.7c0,4.2-3.4,7.7-7.7,7.7c0,0-12.4,0.1-20,0.8 c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,0,0,0,0c0,0,11.3-6,27-7.5 C-16,264.9-3.6,264.8-3.6,264.8z M-11,302.6c4.2-0.1,7.4,0,7.4,0c4.2,0.5,7.2,4.3,6.7,8.5c-0.4,3.5-3.2,6.3-6.7,6.7 c0,0-12.4,0.1-20,0.8c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,11.3-6,27-7.5 C-20.5,302.9-15.2,302.7-11,302.6z M-3.6,340.2c4.2,0,7.7,3.4,7.7,7.7s-3.4,7.7-7.7,7.7c0,0-12.4-0.1-20,0.7 c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,11.3-6,27-7.5C-16,340.1-3.6,340.2-3.6,340.2z" />
+                </svg>
+              </a><a class="muted-link" href="https://github.com/jerryjliu/gpt_index" aria-label="On GitHub">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Structured Store Index</a><ul>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTNLPandasIndexQuery"><code class="docutils literal notranslate"><span class="pre">GPTNLPandasIndexQuery</span></code></a><ul>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTNLPandasIndexQuery.retrieve"><code class="docutils literal notranslate"><span class="pre">GPTNLPandasIndexQuery.retrieve()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTNLStructStoreIndexQuery"><code class="docutils literal notranslate"><span class="pre">GPTNLStructStoreIndexQuery</span></code></a><ul>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTNLStructStoreIndexQuery.retrieve"><code class="docutils literal notranslate"><span class="pre">GPTNLStructStoreIndexQuery.retrieve()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex</span></code></a><ul>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.aquery"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.aquery()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.from_documents"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.from_documents()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.get_query_map"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.get_query_map()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.insert"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.insert()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.load_from_dict"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.load_from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.load_from_disk"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.load_from_disk()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.load_from_string"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.load_from_string()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.query"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.query()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.query_context"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.query_context</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.refresh"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.refresh()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.save_to_dict"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.save_to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.save_to_disk"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.save_to_disk()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.save_to_string"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.save_to_string()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTPandasIndex.update"><code class="docutils literal notranslate"><span class="pre">GPTPandasIndex.update()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex</span></code></a><ul>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.aquery"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.aquery()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.from_documents"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.from_documents()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.get_query_map"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.get_query_map()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.insert"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.insert()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_dict"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.load_from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_disk"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.load_from_disk()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.load_from_string"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.load_from_string()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.query"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.query()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.query_context"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.query_context</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.refresh"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.refresh()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_dict"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.save_to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_disk"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.save_to_disk()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.save_to_string"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.save_to_string()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndex.update"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndex.update()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndexQuery"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndexQuery</span></code></a><ul>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.GPTSQLStructStoreIndexQuery.retrieve"><code class="docutils literal notranslate"><span class="pre">GPTSQLStructStoreIndexQuery.retrieve()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder"><code class="docutils literal notranslate"><span class="pre">SQLContextContainerBuilder</span></code></a><ul>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.build_context_container"><code class="docutils literal notranslate"><span class="pre">SQLContextContainerBuilder.build_context_container()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.derive_index_from_context"><code class="docutils literal notranslate"><span class="pre">SQLContextContainerBuilder.derive_index_from_context()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.from_documents"><code class="docutils literal notranslate"><span class="pre">SQLContextContainerBuilder.from_documents()</span></code></a></li>
+<li><a class="reference internal" href="#gpt_index.indices.struct_store.SQLContextContainerBuilder.query_index_for_context"><code class="docutils literal notranslate"><span class="pre">SQLContextContainerBuilder.query_index_for_context()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script async="async" src="/_/static/javascript/readthedocs-doc-embed.js"></script>
+    <script src="../../_static/js/mendablesearch.js"></script>
+    </body>
+</html>

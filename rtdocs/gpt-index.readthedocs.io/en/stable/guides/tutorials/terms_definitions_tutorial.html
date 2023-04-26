@@ -1,0 +1,937 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="A Guide to Creating a Unified Query Framework over your Indexes" href="graph.html" /><link rel="prev" title="A Guide to LlamaIndex + Structured Data" href="sql_guide.html" />
+        <link rel="canonical" href="https://gpt-index.readthedocs.io/en/latest/guides/tutorials/terms_definitions_tutorial.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
+        <title>A Guide to Extracting Terms and Definitions - LlamaIndex</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="/_/static/css/badge_only.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style>
+<!-- RTD Extra Head -->
+
+<link rel="stylesheet" href="/_/static/css/readthedocs-doc-embed.css" type="text/css" />
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2023-04-17T00:50:49Z", "builder": "sphinx", "canonical_url": null, "commit": "9e4d0e9f", "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "guides/tutorials/terms_definitions_tutorial", "programming_language": "words", "project": "gpt-index", "proxied_api_host": "/_", "source_suffix": ".md", "subprojects": {}, "theme": "furo", "user_analytics_code": "", "version": "stable"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+<script type="text/javascript" src="/_/static/javascript/readthedocs-analytics.js" async="async"></script>
+
+<!-- end RTD <extrahead> -->
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">LlamaIndex</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">LlamaIndex</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">Installation and Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/starter_example.html">Starter Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../primer.html">A Primer to using LlamaIndex</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../primer/usage_pattern.html">LlamaIndex Usage Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../primer/index_guide.html">How Each Index Works</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../tutorials.html">Tutorials</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="building_a_chatbot.html">💬🤖 How to Build a Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fullstack_app_guide.html">A Guide to Building a Full-Stack Web App with LLamaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_guide.html">A Guide to LlamaIndex + Structured Data</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">A Guide to Extracting Terms and Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graph.html">A Guide to Creating a Unified Query Framework over your Indexes</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://medium.com/@jerryjliu98/how-unstructured-and-llamaindex-can-help-bring-the-power-of-llms-to-your-own-data-3657d063e30d">SEC 10k Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Notebooks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Use Cases</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../use_cases/queries.html">Queries over your Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../use_cases/apps.html">Integrations into LLM Applications</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Key Components</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to/data_connectors.html">Data Connectors (LlamaHub 🦙)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/indices.html">Index Structures</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../primer/index_guide.html">How Each Index Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/update.html">Updating an Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/composability.html">Composability</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/query_interface.html">Query Interface</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../primer/usage_pattern.html">LlamaIndex Usage Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/composability.html">Composability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/query/query_transformations.html">Query Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/query/node_postprocessor.html">Node Postprocessor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/customization.html">Customization</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/custom_llms.html">Defining LLMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/custom_prompts.html">Defining Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/embeddings.html">Embedding support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/analysis.html">Analysis and Optimization</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/cost_analysis.html">Cost Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/playground.html">Playground</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/optimizers.html">Optimizers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to/output_parsing.html">Output Parsing</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/integrations.html">Integrations</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/vector_stores.html">Using Vector Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/chatgpt_plugins.html">ChatGPT Plugin Integrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/using_with_langchain.html">Using with Langchain 🦜🔗</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/indices.html">Indices</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/list.html">List Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/table.html">Table Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/tree.html">Tree Index</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../reference/indices/vector_store.html">Vector Store Index</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/indices/vector_stores/stores.html">Vector Stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/indices/vector_stores/base_index.html">Base Vector Index class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/struct_store.html">Structured Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/kg.html">Knowledge Graph Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/empty.html">Empty Index</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/query.html">Querying an Index</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/list_query.html">Querying a List Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/table_query.html">Querying a Keyword Table Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/tree_query.html">Querying a Tree Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/vector_store_query.html">Querying a Vector Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/struct_store_query.html">Querying a Structured Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/kg_query.html">Querying a Knowledge Graph Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/empty_query.html">Querying an Empty Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/composability_query.html">Composable Queries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/node.html">Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/node_postprocessor.html">Node Postprocessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/docstore.html">Docstore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/composability.html">Composability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/readers.html">Data Connectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/prompts.html">Prompt Templates</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/service_context.html">Service Context</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/embeddings.html">Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/llm_predictor.html">LLMPredictor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/prompt_helper.html">PromptHelper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/llama_logger.html">Llama Logger 🪵</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/struct_store.html">Structured Index Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/response.html">Response</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/playground.html">Playground</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/node_parser.html">Node Parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/example_notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/langchain_integrations/base.html">Langchain Integrations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/app_showcase.html">😎 App Showcase</a></li>
+</ul>
+
+</div>
+
+<div
+  id="furo-sidebar-ad-placement"
+  class="flat"
+  data-ea-publisher="readthedocs"
+  data-ea-type="readthedocs-sidebar"
+  data-ea-manual="true"
+></div>
+</div>
+
+<div id="furo-readthedocs-versions" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" tabindex="0">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book">&nbsp;</span>
+    v: stable
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Versions</dt>
+      
+        <dd><a href="/en/latest/">latest</a></dd>
+      
+        <dd><a href="/en/stable/">stable</a></dd>
+      
+    </dl>
+    <dl>
+      <dt>Downloads</dt>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/pdf/">pdf</a></dd>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/htmlzip/">html</a></dd>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/epub/">epub</a></dd>
+      
+    </dl>
+    <dl>
+      
+      <dt>On Read the Docs</dt>
+        <dd>
+          <a href="//readthedocs.org/projects/gpt-index/?fromdocs=gpt-index">Project Home</a>
+        </dd>
+        <dd>
+          <a href="//readthedocs.org/builds/gpt-index/?fromdocs=gpt-index">Builds</a>
+        </dd>
+    </dl>
+  </div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+  
+  <div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/jerryjliu/gpt_index/edit/9e4d0e9faa6cba99d9baa95321427007cea7e70f/docs/guides/tutorials/terms_definitions_tutorial.md" title="Edit this page">
+    <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+      <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+    </svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="section" id="a-guide-to-extracting-terms-and-definitions">
+<h1>A Guide to Extracting Terms and Definitions<a class="headerlink" href="#a-guide-to-extracting-terms-and-definitions" title="Permalink to this heading"></a></h1>
+<p>Llama Index has many use cases (semantic search, summarization, etc.) that are <a class="reference external" href="https://gpt-index.readthedocs.io/en/latest/use_cases/queries.html">well documented</a>. However, this doesn’t mean we can’t apply Llama Index to very specific use cases!</p>
+<p>In this tutorial, we will go through the design process of using Llama Index to extract terms and definitions from text, while allowing users to query those terms later. Using <a class="reference external" href="https://streamlit.io/">Streamlit</a>, we can provide an easy to build frontend for running and testing all of this, and quickly iterate with our design.</p>
+<p>This tutorial assumes you have Python3.9+ and the following packages installed:</p>
+<ul class="simple">
+<li><p>llama-index</p></li>
+<li><p>streamlit</p></li>
+</ul>
+<p>At the base level, our objective is to take text from a document, extract terms and definitions, and then provide a way for users to query that knowledge base of terms and definitions. The tutorial will go over features from both Llama Index and Streamlit, and hopefully provide some interesting solutions for common problems that come up.</p>
+<p>The final version of this tutorial can be found <a class="reference external" href="https://github.com/logan-markewich/llama_index_starter_pack">here</a> and a live hosted demo is available on <a class="reference external" href="https://huggingface.co/spaces/llamaindex/llama_index_term_definition_demo">Huggingface Spaces</a>.</p>
+<div class="section" id="uploading-text">
+<h2>Uploading Text<a class="headerlink" href="#uploading-text" title="Permalink to this heading"></a></h2>
+<p>Step one is giving users a way to upload documents. Let’s write some code using Streamlit to provide the interface for this! Use the following code and launch the app with <code class="docutils literal notranslate"><span class="pre">streamlit</span> <span class="pre">run</span> <span class="pre">app.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;🦙 Llama Index Term Extractor 🦙&quot;</span><span class="p">)</span>
+
+<span class="n">document_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_area</span><span class="p">(</span><span class="s2">&quot;Or enter raw text&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Extract Terms and Definitions&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">document_text</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Extracting...&quot;</span><span class="p">):</span>
+        <span class="n">extracted_terms</span> <span class="o">=</span> <span class="n">document</span> <span class="n">text</span>  <span class="c1"># this is a placeholder!</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">extracted_terms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Super simple right! But you’ll notice that the app doesn’t do anything useful yet. To use llama_index, we also need to setup our OpenAI LLM. There are a bunch of possible settings for the LLM, so we can let the user figure out what’s best. We should also let the user set the prompt that will extract the terms (which will also help us debug what works best).</p>
+</div>
+<div class="section" id="llm-settings">
+<h2>LLM Settings<a class="headerlink" href="#llm-settings" title="Permalink to this heading"></a></h2>
+<p>This next step introduces some tabs to our app, to separate it into different panes that provide different features. Let’s create a tab for LLM settings and for uploading text:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+
+<span class="n">DEFAULT_TERM_STR</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;Make a list of terms and definitions that are defined in the context, &quot;</span>
+    <span class="s2">&quot;with one pair on each line. &quot;</span>
+    <span class="s2">&quot;If a term is missing it&#39;s definition, use your best judgment. &quot;</span>
+    <span class="s2">&quot;Write each line as as follows:</span><span class="se">\n</span><span class="s2">Term: &lt;term&gt; Definition: &lt;definition&gt;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;🦙 Llama Index Term Extractor 🦙&quot;</span><span class="p">)</span>
+
+<span class="n">setup_tab</span><span class="p">,</span> <span class="n">upload_tab</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">([</span><span class="s2">&quot;Setup&quot;</span><span class="p">,</span> <span class="s2">&quot;Upload/Extract Terms&quot;</span><span class="p">])</span>
+
+<span class="k">with</span> <span class="n">setup_tab</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;LLM Setup&quot;</span><span class="p">)</span>
+    <span class="n">api_key</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span><span class="s2">&quot;Enter your OpenAI API key here&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+    <span class="n">llm_name</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">selectbox</span><span class="p">(</span><span class="s1">&#39;Which LLM?&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;text-davinci-003&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-4&quot;</span><span class="p">])</span>
+    <span class="n">model_temperature</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">slider</span><span class="p">(</span><span class="s2">&quot;LLM Temperature&quot;</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">term_extract_str</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_area</span><span class="p">(</span><span class="s2">&quot;The query to extract terms and definitions with.&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">DEFAULT_TERM_STR</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">upload_tab</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;Extract and Query Definitions&quot;</span><span class="p">)</span>
+    <span class="n">document_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_area</span><span class="p">(</span><span class="s2">&quot;Or enter raw text&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Extract Terms and Definitions&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">document_text</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Extracting...&quot;</span><span class="p">):</span>
+            <span class="n">extracted_terms</span> <span class="o">=</span> <span class="n">document</span> <span class="n">text</span>  <span class="c1"># this is a placeholder!</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">extracted_terms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now our app has two tabs, which really helps with the organization. You’ll also noticed I added a default prompt to extract terms – you can change this later once you try extracting some terms, it’s just the prompt I arrived at after experimenting a bit.</p>
+<p>Speaking of extracting terms, it’s time to add some functions to do just that!</p>
+</div>
+<div class="section" id="extracting-and-storing-terms">
+<h2>Extracting and Storing Terms<a class="headerlink" href="#extracting-and-storing-terms" title="Permalink to this heading"></a></h2>
+<p>Now that we are able to define LLM settings and upload text, we can try using Llama Index to extract the terms from text for us!</p>
+<p>We can add the following functions to both initialize our LLM, as well as use it to extract terms from the input text.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index</span> <span class="kn">import</span> <span class="n">Document</span><span class="p">,</span> <span class="n">GPTListIndex</span><span class="p">,</span> <span class="n">LLMPredictor</span><span class="p">,</span> <span class="n">ServiceContext</span><span class="p">,</span> <span class="n">PromptHelper</span>
+
+<span class="k">def</span> <span class="nf">get_llm</span><span class="p">(</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;OPENAI_API_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">api_key</span>
+    <span class="k">if</span> <span class="n">llm_name</span> <span class="o">==</span> <span class="s2">&quot;text-davinci-003&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="n">model_temperature</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="n">model_temperature</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">extract_terms</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">term_extract_str</span><span class="p">,</span> <span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">):</span>
+    <span class="n">llm</span> <span class="o">=</span> <span class="n">get_llm</span><span class="p">(</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+
+    <span class="n">service_context</span> <span class="o">=</span> <span class="n">ServiceContext</span><span class="o">.</span><span class="n">from_defaults</span><span class="p">(</span><span class="n">llm_predictor</span><span class="o">=</span><span class="n">LLMPredictor</span><span class="p">(</span><span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">),</span>
+                                                   <span class="n">prompt_helper</span><span class="o">=</span><span class="n">PromptHelper</span><span class="p">(</span><span class="n">max_input_size</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>
+                                                                              <span class="n">max_chunk_overlap</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                                                                              <span class="n">num_output</span><span class="o">=</span><span class="mi">1024</span><span class="p">),</span>
+                                                   <span class="n">chunk_size_limit</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+
+    <span class="n">temp_index</span> <span class="o">=</span> <span class="n">GPTListIndex</span><span class="o">.</span><span class="n">from_documents</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">service_context</span><span class="o">=</span><span class="n">service_context</span><span class="p">)</span>
+    <span class="n">terms_definitions</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">temp_index</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">term_extract_str</span><span class="p">,</span> <span class="n">response_mode</span><span class="o">=</span><span class="s2">&quot;tree_summarize&quot;</span><span class="p">))</span>
+    <span class="n">terms_definitions</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">terms_definitions</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">and</span> <span class="s1">&#39;Term:&#39;</span> <span class="ow">in</span> <span class="n">x</span> <span class="ow">and</span> <span class="s1">&#39;Definition:&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+    <span class="c1"># parse the text into a dict</span>
+    <span class="n">terms_to_definition</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;Definition:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;Term:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;Definition:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">terms_definitions</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">terms_to_definition</span>
+</pre></div>
+</div>
+<p>Now, using the new functions, we can finally extract our terms!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="k">with</span> <span class="n">upload_tab</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;Extract and Query Definitions&quot;</span><span class="p">)</span>
+    <span class="n">document_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_area</span><span class="p">(</span><span class="s2">&quot;Or enter raw text&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Extract Terms and Definitions&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">document_text</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Extracting...&quot;</span><span class="p">):</span>
+            <span class="n">extracted_terms</span> <span class="o">=</span> <span class="n">extract_terms</span><span class="p">([</span><span class="n">Document</span><span class="p">(</span><span class="n">document_text</span><span class="p">)],</span>
+                                            <span class="n">term_extract_str</span><span class="p">,</span> <span class="n">llm_name</span><span class="p">,</span>
+                                            <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">extracted_terms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There’s a lot going on now, let’s take a moment to go over what is happening.</p>
+<p><code class="docutils literal notranslate"><span class="pre">get_llm()</span></code> is instantiating the LLM based on the user configuration from the setup tab. Based on the model name, we need to use the appropriate class (<code class="docutils literal notranslate"><span class="pre">OpenAI</span></code> vs. <code class="docutils literal notranslate"><span class="pre">ChatOpenAI</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">extract_terms()</span></code> is where all the good stuff happens. First, we call <code class="docutils literal notranslate"><span class="pre">get_llm()</span></code> with <code class="docutils literal notranslate"><span class="pre">max_tokens=1024</span></code>, since we don’t want to limit the model too much when it is extracting our terms and definitions (the default is 256 if not set). Then, we define our <code class="docutils literal notranslate"><span class="pre">ServiceContext</span></code> object, aligning <code class="docutils literal notranslate"><span class="pre">num_output</span></code> with our <code class="docutils literal notranslate"><span class="pre">max_tokens</span></code> value, as well as setting the chunk size to be no larger than the output. When documents are indexed by Llama Index, they are broken into chunks (also called nodes) if they are large, and <code class="docutils literal notranslate"><span class="pre">chunk_size_limit</span></code> sets the maximum size for these chunks.</p>
+<p>Next, we create a temporary list index and pass in our service context. A list index will read every single piece of text in our index, which is perfect for extracting terms. Finally, we use our pre-defined query text to extract terms, using <code class="docutils literal notranslate"><span class="pre">response_mode=&quot;tree_summarize</span></code>. This response mode will generate a tree of summaries from the bottom up, where each parent summarizes its children. Finally, the top of the tree is returned, which will contain all our extracted terms and definitions.</p>
+<p>Lastly, we do some minor post processing. We assume the model followed instructions and put a term/definition pair on each line. If a line is missing the <code class="docutils literal notranslate"><span class="pre">Term:</span></code> or <code class="docutils literal notranslate"><span class="pre">Definition:</span></code> labels, we skip it. Then, we convert this to a dictionary for easy storage!</p>
+</div>
+<div class="section" id="saving-extracted-terms">
+<h2>Saving Extracted Terms<a class="headerlink" href="#saving-extracted-terms" title="Permalink to this heading"></a></h2>
+<p>Now that we can extract terms, we need to put them somewhere so that we can query for them later. A <code class="docutils literal notranslate"><span class="pre">GPTSimpleVectorIndex</span></code> should be a perfect choice for now! But in addition, our app should also keep track of which terms are inserted into the index so that we can inspect them later. Using <code class="docutils literal notranslate"><span class="pre">st.session_state</span></code>, we can store the current list of terms in a session dict, unique to each user!</p>
+<p>First things first though, let’s add a feature to initialize a global vector index and another function to insert the extracted terms.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="k">if</span> <span class="s1">&#39;all_terms&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;all_terms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_TERMS</span>
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">insert_terms</span><span class="p">(</span><span class="n">terms_to_definition</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">terms_to_definition</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Term: </span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="se">\n</span><span class="s2">Definition: </span><span class="si">{</span><span class="n">definition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;llama_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_resource</span>
+<span class="k">def</span> <span class="nf">initialize_index</span><span class="p">(</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the GPTSQLStructStoreIndex object.&quot;&quot;&quot;</span>
+    <span class="n">llm</span> <span class="o">=</span> <span class="n">get_llm</span><span class="p">(</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+
+    <span class="n">service_context</span> <span class="o">=</span> <span class="n">ServiceContext</span><span class="o">.</span><span class="n">from_defaults</span><span class="p">(</span><span class="n">llm_predictor</span><span class="o">=</span><span class="n">LLMPredictor</span><span class="p">(</span><span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">))</span>
+
+    <span class="n">index</span> <span class="o">=</span> <span class="n">GPTSimpleVectorIndex</span><span class="p">([],</span> <span class="n">service_context</span><span class="o">=</span><span class="n">service_context</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">index</span>
+
+<span class="o">...</span>
+
+<span class="k">with</span> <span class="n">upload_tab</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;Extract and Query Definitions&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Initialize Index and Reset Terms&quot;</span><span class="p">):</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;llama_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">initialize_index</span><span class="p">(</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;all_terms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="s2">&quot;llama_index&quot;</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;Either upload an image/screenshot of a document, or enter the text manually.&quot;</span><span class="p">)</span>
+        <span class="n">document_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_area</span><span class="p">(</span><span class="s2">&quot;Or enter raw text&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Extract Terms and Definitions&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">uploaded_file</span> <span class="ow">or</span> <span class="n">document_text</span><span class="p">):</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;terms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">terms_docs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Extracting...&quot;</span><span class="p">):</span>
+                <span class="n">terms_docs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extract_terms</span><span class="p">([</span><span class="n">Document</span><span class="p">(</span><span class="n">document_text</span><span class="p">)],</span> <span class="n">term_extract_str</span><span class="p">,</span> <span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">))</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;terms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">terms_docs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;terms&quot;</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span> <span class="ow">and</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">]::</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;Extracted terms&quot;</span><span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;terms&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Insert terms?&quot;</span><span class="p">):</span>
+                <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Inserting terms&quot;</span><span class="p">):</span>
+                    <span class="n">insert_terms</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;terms&#39;</span><span class="p">])</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;all_terms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;terms&#39;</span><span class="p">])</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;terms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">experimental_rerun</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now you are really starting to leverage the power of streamlit! Let’s start with the code under the upload tab. We added a button to initialize the vector index, and we store it in the global streamlit state dictionary, as well as resetting the currently extracted terms. Then, after extracting terms from the input text, we store it the extracted terms in the global state again and give the user a chance to review them before inserting. If the insert button is pressed, then we call our insert terms function, update our global tracking of inserted terms, and remove the most recently extracted terms from the session state.</p>
+</div>
+<div class="section" id="querying-for-extracted-terms-definitions">
+<h2>Querying for Extracted Terms/Definitions<a class="headerlink" href="#querying-for-extracted-terms-definitions" title="Permalink to this heading"></a></h2>
+<p>With the terms and definitions extracted and saved, how can we use them? And how will the user even remember what’s previously been saved?? We can simply add some more tabs to the app to handle these features.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="n">setup_tab</span><span class="p">,</span> <span class="n">terms_tab</span><span class="p">,</span> <span class="n">upload_tab</span><span class="p">,</span> <span class="n">query_tab</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;Setup&quot;</span><span class="p">,</span> <span class="s2">&quot;All Terms&quot;</span><span class="p">,</span> <span class="s2">&quot;Upload/Extract Terms&quot;</span><span class="p">,</span> <span class="s2">&quot;Query Terms&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="o">...</span>
+<span class="k">with</span> <span class="n">terms_tab</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">terms_tab</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;Current Extracted Terms and Definitions&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;all_terms&quot;</span><span class="p">])</span>
+<span class="o">...</span>
+<span class="k">with</span> <span class="n">query_tab</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;Query for Terms/Definitions!&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;The LLM will attempt to answer your query, and augment it&#39;s answers using the terms/definitions you&#39;ve inserted. &quot;</span>
+            <span class="s2">&quot;If a term is not in the index, it will answer using it&#39;s internal knowledge.&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Initialize Index and Reset Terms&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;init_index_2&quot;</span><span class="p">):</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;llama_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">initialize_index</span><span class="p">(</span>
+            <span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;all_terms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="s2">&quot;llama_index&quot;</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+        <span class="n">query_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span><span class="s2">&quot;Ask about a term or definition:&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">query_text</span><span class="p">:</span>
+            <span class="n">query_text</span> <span class="o">=</span> <span class="n">query_text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">If you can&#39;t find the answer, answer the query with the best of your knowledge.&quot;</span>
+            <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Generating answer...&quot;</span><span class="p">):</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;llama_index&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+                    <span class="n">query_text</span><span class="p">,</span> <span class="n">similarity_top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">response_mode</span><span class="o">=</span><span class="s2">&quot;compact&quot;</span>
+                <span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>While this is mostly basic, some important things to note:</p>
+<ul class="simple">
+<li><p>Our initialize button has the same text as our other button. Streamlit will complain about this, so we provide a unique key instead.</p></li>
+<li><p>Some additional text has been added to the query! This is to try and compensate for times when the index does not have the answer.</p></li>
+<li><p>In our index query, we’ve specified two options:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">similarity_top_k=5</span></code> means the index will fetch the top 5 closest matching terms/definitions to the query.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">response_mode=&quot;compact&quot;</span></code> means as much text as possible from the 5 matching terms/definitions will be used in each LLM call. Without this, the index would make at least 5 calls to the LLM, which can slow things down for the user.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="dry-run-test">
+<h2>Dry Run Test<a class="headerlink" href="#dry-run-test" title="Permalink to this heading"></a></h2>
+<p>Well, actually I hope you’ve been testing as we went. But now, let’s try one complete test.</p>
+<ol class="arabic simple">
+<li><p>Refresh the app</p></li>
+<li><p>Enter your LLM settings</p></li>
+<li><p>Head over to the query tab</p></li>
+<li><p>Ask the following: <code class="docutils literal notranslate"><span class="pre">What</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">bunnyhug?</span></code></p></li>
+<li><p>The app should give some nonsense response. If you didn’t know, a bunnyhug is another word for a hoodie, used by people from the Canadian Prairies!</p></li>
+<li><p>Let’s add this definition to the app. Open the upload tab and enter the following text: <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">bunnyhug</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">common</span> <span class="pre">term</span> <span class="pre">used</span> <span class="pre">to</span> <span class="pre">describe</span> <span class="pre">a</span> <span class="pre">hoodie.</span> <span class="pre">This</span> <span class="pre">term</span> <span class="pre">is</span> <span class="pre">used</span> <span class="pre">by</span> <span class="pre">people</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">Canadian</span> <span class="pre">Prairies.</span></code></p></li>
+<li><p>Click the extract button. After a few moments, the app should display the correctly extracted term/definition. Click the insert term button to save it!</p></li>
+<li><p>If we open the terms tab, the term and definition we just extracted should be displayed</p></li>
+<li><p>Go back to the query tab and try asking what a bunnyhug is. Now, the answer should be correct!</p></li>
+</ol>
+</div>
+<div class="section" id="improvement-1-create-a-starting-index">
+<h2>Improvement #1 - Create a Starting Index<a class="headerlink" href="#improvement-1-create-a-starting-index" title="Permalink to this heading"></a></h2>
+<p>With our base app working, it might feel like a lot of work to build up a useful index. What if we gave the user some kind of starting point to show off the app’s query capabilities? We can do just that! First, let’s make a small change to our app so that we save the index to disk after every upload:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">insert_terms</span><span class="p">(</span><span class="n">terms_to_definition</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">terms_to_definition</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Term: </span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="se">\n</span><span class="s2">Definition: </span><span class="si">{</span><span class="n">definition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;llama_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+    <span class="c1"># TEMPORARY - save to disk</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;llama_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="s2">&quot;index.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, we need some document to extract from! The repository for this project used the wikipedia page on New York City, and you can find the text <a class="reference external" href="https://github.com/jerryjliu/llama_index/blob/main/examples/test_wiki/data/nyc_text.txt">here</a>.</p>
+<p>If you paste the text into the upload tab and run it (it may take some time), we can insert the extracted terms. Make sure to also copy the text for the extracted terms into a notepad or similar before inserting into the index! We will need them in a second.</p>
+<p>After inserting, remove the line of code we used to save the index to disk. With a starting index now saved, we can modify our <code class="docutils literal notranslate"><span class="pre">initialize_index</span></code> function to look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@st</span><span class="o">.</span><span class="n">cache_resource</span>
+<span class="k">def</span> <span class="nf">initialize_index</span><span class="p">(</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the GPTSQLStructStoreIndex object.&quot;&quot;&quot;</span>
+    <span class="n">llm</span> <span class="o">=</span> <span class="n">get_llm</span><span class="p">(</span><span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+
+    <span class="n">service_context</span> <span class="o">=</span> <span class="n">ServiceContext</span><span class="o">.</span><span class="n">from_defaults</span><span class="p">(</span><span class="n">llm_predictor</span><span class="o">=</span><span class="n">LLMPredictor</span><span class="p">(</span><span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">))</span>
+
+    <span class="n">index</span> <span class="o">=</span> <span class="n">GPTSimpleVectorIndex</span><span class="o">.</span><span class="n">load_from_disk</span><span class="p">(</span>
+        <span class="s2">&quot;./index.json&quot;</span><span class="p">,</span> <span class="n">service_context</span><span class="o">=</span><span class="n">service_context</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">index</span>
+</pre></div>
+</div>
+<p>Did you remember to save that giant list of extracted terms in a notepad? Now when our app initializes, we want to pass in the default terms that are in the index to our global terms state:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="k">if</span> <span class="s2">&quot;all_terms&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;all_terms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_TERMS</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Repeat the above anywhere where we were previously resetting the <code class="docutils literal notranslate"><span class="pre">all_terms</span></code> values.</p>
+</div>
+<div class="section" id="improvement-2-refining-better-prompts">
+<h2>Improvement #2 - (Refining) Better Prompts<a class="headerlink" href="#improvement-2-refining-better-prompts" title="Permalink to this heading"></a></h2>
+<p>If you play around with the app a bit now, you might notice that it stopped following our prompt! Remember, we added to our <code class="docutils literal notranslate"><span class="pre">query_str</span></code> variable that if the term/definition could not be found, answer to the best of its knowledge. But now if you try asking about random terms (like bunnyhug!), it may or may not follow those instructions.</p>
+<p>This is due to the concept of “refining” answers in Llama Index. Since we are querying across the top 5 matching results, sometimes all the results do not fit in a single prompt! OpenAI models typically have a max input size of 4097 tokens. So, Llama Index accounts for this by breaking up the matching results into chunks that will fit into the prompt. After Llama Index gets an initial answer from the first API call, it sends the next chunk to the API, along with the previous answer, and asks the model to refine that answer.</p>
+<p>So, the refine process seems to be messing with our results! Rather than appending extra instructions to the <code class="docutils literal notranslate"><span class="pre">query_str</span></code>, remove that, and Llama Index will let us provide our own custom prompts! Let’s create those now, using the <a class="reference external" href="https://github.com/jerryjliu/llama_index/blob/main/gpt_index/prompts/default_prompts.py">default prompts</a> and <a class="reference external" href="https://github.com/jerryjliu/llama_index/blob/main/gpt_index/prompts/chat_prompts.py">chat specific prompts</a> as a guide. Using a new file <code class="docutils literal notranslate"><span class="pre">constants.py</span></code>, let’s create some new query templates:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">langchain.chains.prompt_selector</span> <span class="kn">import</span> <span class="n">ConditionalPromptSelector</span><span class="p">,</span> <span class="n">is_chat_model</span>
+<span class="kn">from</span> <span class="nn">langchain.prompts.chat</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AIMessagePromptTemplate</span><span class="p">,</span>
+    <span class="n">ChatPromptTemplate</span><span class="p">,</span>
+    <span class="n">HumanMessagePromptTemplate</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">llama_index.prompts.prompts</span> <span class="kn">import</span> <span class="n">QuestionAnswerPrompt</span><span class="p">,</span> <span class="n">RefinePrompt</span>
+
+<span class="c1"># Text QA templates</span>
+<span class="n">DEFAULT_TEXT_QA_PROMPT_TMPL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;Context information is below. </span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;---------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="si">{context_str}</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;Given the context information answer the following question &quot;</span>
+    <span class="s2">&quot;(if you don&#39;t know the answer, use the best of your knowledge): </span><span class="si">{query_str}</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+<span class="n">TEXT_QA_TEMPLATE</span> <span class="o">=</span> <span class="n">QuestionAnswerPrompt</span><span class="p">(</span><span class="n">DEFAULT_TEXT_QA_PROMPT_TMPL</span><span class="p">)</span>
+
+<span class="c1"># Refine templates</span>
+<span class="n">DEFAULT_REFINE_PROMPT_TMPL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;The original question is as follows: </span><span class="si">{query_str}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;We have provided an existing answer: </span><span class="si">{existing_answer}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;We have the opportunity to refine the existing answer &quot;</span>
+    <span class="s2">&quot;(only if needed) with some more context below.</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="si">{context_msg}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;Given the new context and using the best of your knowledge, improve the existing answer. &quot;</span>
+    <span class="s2">&quot;If you can&#39;t improve the existing answer, just repeat it again.&quot;</span>
+<span class="p">)</span>
+<span class="n">DEFAULT_REFINE_PROMPT</span> <span class="o">=</span> <span class="n">RefinePrompt</span><span class="p">(</span><span class="n">DEFAULT_REFINE_PROMPT_TMPL</span><span class="p">)</span>
+
+<span class="n">CHAT_REFINE_PROMPT_TMPL_MSGS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">HumanMessagePromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{query_str}</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="n">AIMessagePromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{existing_answer}</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="n">HumanMessagePromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
+        <span class="s2">&quot;We have the opportunity to refine the above answer &quot;</span>
+        <span class="s2">&quot;(only if needed) with some more context below.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="si">{context_msg}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Given the new context and using the best of your knowledge, improve the existing answer. &quot;</span>
+    <span class="s2">&quot;If you can&#39;t improve the existing answer, just repeat it again.&quot;</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">CHAT_REFINE_PROMPT_LC</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_messages</span><span class="p">(</span><span class="n">CHAT_REFINE_PROMPT_TMPL_MSGS</span><span class="p">)</span>
+<span class="n">CHAT_REFINE_PROMPT</span> <span class="o">=</span> <span class="n">RefinePrompt</span><span class="o">.</span><span class="n">from_langchain_prompt</span><span class="p">(</span><span class="n">CHAT_REFINE_PROMPT_LC</span><span class="p">)</span>
+
+<span class="c1"># refine prompt selector</span>
+<span class="n">DEFAULT_REFINE_PROMPT_SEL_LC</span> <span class="o">=</span> <span class="n">ConditionalPromptSelector</span><span class="p">(</span>
+    <span class="n">default_prompt</span><span class="o">=</span><span class="n">DEFAULT_REFINE_PROMPT</span><span class="o">.</span><span class="n">get_langchain_prompt</span><span class="p">(),</span>
+    <span class="n">conditionals</span><span class="o">=</span><span class="p">[(</span><span class="n">is_chat_model</span><span class="p">,</span> <span class="n">CHAT_REFINE_PROMPT</span><span class="o">.</span><span class="n">get_langchain_prompt</span><span class="p">())],</span>
+<span class="p">)</span>
+<span class="n">REFINE_TEMPLATE</span> <span class="o">=</span> <span class="n">RefinePrompt</span><span class="p">(</span>
+    <span class="n">langchain_prompt_selector</span><span class="o">=</span><span class="n">DEFAULT_REFINE_PROMPT_SEL_LC</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>That seems like a lot of code, but it’s not too bad! If you looked at the default prompts, you might have noticed that there are default prompts, and prompts specific to chat models. Continuing that trend, we do the same for our custom prompts. Then, using a prompt selector, we can combine both prompts into a single object. If the LLM being used is a chat model (ChatGPT, GPT-4), then the chat prompts are used. Otherwise, use the normal prompt templates.</p>
+<p>Another thing to note is that we only defined one QA template. In a chat model, this will be converted to a single “human” message.</p>
+<p>So, now we can import these prompts into our app and use them during the query.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="n">REFINE_TEMPLATE</span><span class="p">,</span> <span class="n">TEXT_QA_TEMPLATE</span>
+<span class="o">...</span>
+    <span class="k">if</span> <span class="s2">&quot;llama_index&quot;</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+        <span class="n">query_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span><span class="s2">&quot;Ask about a term or definition:&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">query_text</span><span class="p">:</span>
+            <span class="n">query_text</span> <span class="o">=</span> <span class="n">query_text</span>  <span class="c1"># Notice we removed the old instructions</span>
+            <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Generating answer...&quot;</span><span class="p">):</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;llama_index&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+                    <span class="n">query_text</span><span class="p">,</span> <span class="n">similarity_top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">response_mode</span><span class="o">=</span><span class="s2">&quot;compact&quot;</span><span class="p">,</span>
+                    <span class="n">text_qa_template</span><span class="o">=</span><span class="n">TEXT_QA_TEMPLATE</span><span class="p">,</span> <span class="n">refine_template</span><span class="o">=</span><span class="n">REFINE_TEMPLATE</span>
+                <span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>If you experiment a bit more with queries, hopefully you notice that the responses follow our instructions a little better now!</p>
+</div>
+<div class="section" id="improvement-3-image-support">
+<h2>Improvement #3 - Image Support<a class="headerlink" href="#improvement-3-image-support" title="Permalink to this heading"></a></h2>
+<p>Llama index also supports images! Using Llama Index, we can upload images of documents (papers, letters, etc.), and Llama Index handles extracting the text. We can leverage this to also allow users to upload images of their documents and extract terms and definitions from them.</p>
+<p>If you get an import error about PIL, install it using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">Pillow</span></code> first.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">llama_index.readers.file.base</span> <span class="kn">import</span> <span class="n">DEFAULT_FILE_EXTRACTOR</span><span class="p">,</span> <span class="n">ImageParser</span>
+
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_resource</span>
+<span class="k">def</span> <span class="nf">get_file_extractor</span><span class="p">():</span>
+    <span class="n">image_parser</span> <span class="o">=</span> <span class="n">ImageParser</span><span class="p">(</span><span class="n">keep_image</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parse_text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">file_extractor</span> <span class="o">=</span> <span class="n">DEFAULT_FILE_EXTRACTOR</span>
+    <span class="n">file_extractor</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;.jpg&quot;</span><span class="p">:</span> <span class="n">image_parser</span><span class="p">,</span>
+            <span class="s2">&quot;.png&quot;</span><span class="p">:</span> <span class="n">image_parser</span><span class="p">,</span>
+            <span class="s2">&quot;.jpeg&quot;</span><span class="p">:</span> <span class="n">image_parser</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">file_extractor</span>
+
+<span class="n">file_extractor</span> <span class="o">=</span> <span class="n">get_file_extractor</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="k">with</span> <span class="n">upload_tab</span><span class="p">:</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="s2">&quot;Extract and Query Definitions&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Initialize Index and Reset Terms&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;init_index_1&quot;</span><span class="p">):</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;llama_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">initialize_index</span><span class="p">(</span>
+            <span class="n">llm_name</span><span class="p">,</span> <span class="n">model_temperature</span><span class="p">,</span> <span class="n">api_key</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;all_terms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_TERMS</span>
+
+    <span class="k">if</span> <span class="s2">&quot;llama_index&quot;</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+            <span class="s2">&quot;Either upload an image/screenshot of a document, or enter the text manually.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">uploaded_file</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">file_uploader</span><span class="p">(</span>
+            <span class="s2">&quot;Upload an image/screenshot of a document:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;jpeg&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">document_text</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_area</span><span class="p">(</span><span class="s2">&quot;Or enter raw text&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Extract Terms and Definitions&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">uploaded_file</span> <span class="ow">or</span> <span class="n">document_text</span>
+        <span class="p">):</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">terms_docs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Extracting (images may be slow)...&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">document_text</span><span class="p">:</span>
+                    <span class="n">terms_docs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                        <span class="n">extract_terms</span><span class="p">(</span>
+                            <span class="p">[</span><span class="n">Document</span><span class="p">(</span><span class="n">document_text</span><span class="p">)],</span>
+                            <span class="n">term_extract_str</span><span class="p">,</span>
+                            <span class="n">llm_name</span><span class="p">,</span>
+                            <span class="n">model_temperature</span><span class="p">,</span>
+                            <span class="n">api_key</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">uploaded_file</span><span class="p">:</span>
+                    <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">uploaded_file</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;temp.png&quot;</span><span class="p">)</span>
+                    <span class="n">img_reader</span> <span class="o">=</span> <span class="n">SimpleDirectoryReader</span><span class="p">(</span>
+                        <span class="n">input_files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;temp.png&quot;</span><span class="p">],</span> <span class="n">file_extractor</span><span class="o">=</span><span class="n">file_extractor</span>
+                    <span class="p">)</span>
+                    <span class="n">img_docs</span> <span class="o">=</span> <span class="n">img_reader</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;temp.png&quot;</span><span class="p">)</span>
+                    <span class="n">terms_docs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                        <span class="n">extract_terms</span><span class="p">(</span>
+                            <span class="n">img_docs</span><span class="p">,</span>
+                            <span class="n">term_extract_str</span><span class="p">,</span>
+                            <span class="n">llm_name</span><span class="p">,</span>
+                            <span class="n">model_temperature</span><span class="p">,</span>
+                            <span class="n">api_key</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">terms_docs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;terms&quot;</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span> <span class="ow">and</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">]:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;Extracted terms&quot;</span><span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s2">&quot;Insert terms?&quot;</span><span class="p">):</span>
+                <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Inserting terms&quot;</span><span class="p">):</span>
+                    <span class="n">insert_terms</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">])</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;all_terms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">])</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">experimental_rerun</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here, we added the option to upload a file using Streamlit. Then the image is opened and saved to disk (this seems hacky but it keeps things simple). Then we pass the image path to the reader, extract the documents/text, and remove our temp image file.</p>
+<p>Now that we have the documents, we can call <code class="docutils literal notranslate"><span class="pre">extract_terms()</span></code> the same as before.</p>
+</div>
+<div class="section" id="conclusion-tldr">
+<h2>Conclusion/TLDR<a class="headerlink" href="#conclusion-tldr" title="Permalink to this heading"></a></h2>
+<p>In this tutorial, we covered a ton of information, while solving some common issues and problems along the way:</p>
+<ul class="simple">
+<li><p>Using different indexes for different use cases (List vs. Vector index)</p></li>
+<li><p>Storing global state values with Streamlit’s <code class="docutils literal notranslate"><span class="pre">session_state</span></code> concept</p></li>
+<li><p>Customizing internal prompts with Llama Index</p></li>
+<li><p>Reading text from images with Llama Index</p></li>
+</ul>
+<p>The final version of this tutorial can be found <a class="reference external" href="https://github.com/logan-markewich/llama_index_starter_pack">here</a> and a live hosted demo is available on <a class="reference external" href="https://huggingface.co/spaces/llamaindex/llama_index_term_definition_demo">Huggingface Spaces</a>.</p>
+</div>
+</div>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="graph.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">A Guide to Creating a Unified Query Framework over your Indexes</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="sql_guide.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">A Guide to LlamaIndex + Structured Data</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Jerry Liu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link" href="https://readthedocs.org/projects/gpt-index" aria-label="On Read the Docs">
+                <svg x="0px" y="0px" viewBox="-125 217 360 360" xml:space="preserve">
+                  <path fill="currentColor" d="M39.2,391.3c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3 c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2 c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,391.3,40.4,391.1,39.2,391.3z M39.2,353.6c-4.2,0.6-7.1,4.4-6.5,8.5 c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4 c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,353.6,40.4,353.4,39.2,353.6z M39.2,315.9 c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8 c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9 C41.7,315.9,40.4,315.8,39.2,315.9z M39.2,278.3c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7 c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6 c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,278.2,40.4,278.1,39.2,278.3z M-13.6,238.5c-39.6,0.3-54.3,12.5-54.3,12.5v295.7 c0,0,14.4-12.4,60.8-10.5s55.9,18.2,112.9,19.3s71.3-8.8,71.3-8.8l0.8-301.4c0,0-25.6,7.3-75.6,7.7c-49.9,0.4-61.9-12.7-107.7-14.2 C-8.2,238.6-10.9,238.5-13.6,238.5z M19.5,257.8c0,0,24,7.9,68.3,10.1c37.5,1.9,75-3.7,75-3.7v267.9c0,0-19,10-66.5,6.6 C59.5,536.1,19,522.1,19,522.1L19.5,257.8z M-3.6,264.8c4.2,0,7.7,3.4,7.7,7.7c0,4.2-3.4,7.7-7.7,7.7c0,0-12.4,0.1-20,0.8 c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,0,0,0,0c0,0,11.3-6,27-7.5 C-16,264.9-3.6,264.8-3.6,264.8z M-11,302.6c4.2-0.1,7.4,0,7.4,0c4.2,0.5,7.2,4.3,6.7,8.5c-0.4,3.5-3.2,6.3-6.7,6.7 c0,0-12.4,0.1-20,0.8c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,11.3-6,27-7.5 C-20.5,302.9-15.2,302.7-11,302.6z M-3.6,340.2c4.2,0,7.7,3.4,7.7,7.7s-3.4,7.7-7.7,7.7c0,0-12.4-0.1-20,0.7 c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,11.3-6,27-7.5C-16,340.1-3.6,340.2-3.6,340.2z" />
+                </svg>
+              </a><a class="muted-link" href="https://github.com/jerryjliu/gpt_index" aria-label="On GitHub">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">A Guide to Extracting Terms and Definitions</a><ul>
+<li><a class="reference internal" href="#uploading-text">Uploading Text</a></li>
+<li><a class="reference internal" href="#llm-settings">LLM Settings</a></li>
+<li><a class="reference internal" href="#extracting-and-storing-terms">Extracting and Storing Terms</a></li>
+<li><a class="reference internal" href="#saving-extracted-terms">Saving Extracted Terms</a></li>
+<li><a class="reference internal" href="#querying-for-extracted-terms-definitions">Querying for Extracted Terms/Definitions</a></li>
+<li><a class="reference internal" href="#dry-run-test">Dry Run Test</a></li>
+<li><a class="reference internal" href="#improvement-1-create-a-starting-index">Improvement #1 - Create a Starting Index</a></li>
+<li><a class="reference internal" href="#improvement-2-refining-better-prompts">Improvement #2 - (Refining) Better Prompts</a></li>
+<li><a class="reference internal" href="#improvement-3-image-support">Improvement #3 - Image Support</a></li>
+<li><a class="reference internal" href="#conclusion-tldr">Conclusion/TLDR</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script async="async" src="/_/static/javascript/readthedocs-doc-embed.js"></script>
+    <script src="../../_static/js/mendablesearch.js"></script>
+    </body>
+</html>

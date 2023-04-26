@@ -1,0 +1,804 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="A Guide to LlamaIndex + Structured Data" href="sql_guide.html" /><link rel="prev" title="💬🤖 How to Build a Chatbot" href="building_a_chatbot.html" />
+        <link rel="canonical" href="https://gpt-index.readthedocs.io/en/latest/guides/tutorials/fullstack_app_guide.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
+        <title>A Guide to Building a Full-Stack Web App with LLamaIndex - LlamaIndex</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="/_/static/css/badge_only.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style>
+<!-- RTD Extra Head -->
+
+<link rel="stylesheet" href="/_/static/css/readthedocs-doc-embed.css" type="text/css" />
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2023-04-17T00:50:48Z", "builder": "sphinx", "canonical_url": null, "commit": "9e4d0e9f", "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "guides/tutorials/fullstack_app_guide", "programming_language": "words", "project": "gpt-index", "proxied_api_host": "/_", "source_suffix": ".md", "subprojects": {}, "theme": "furo", "user_analytics_code": "", "version": "stable"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+<script type="text/javascript" src="/_/static/javascript/readthedocs-analytics.js" async="async"></script>
+
+<!-- end RTD <extrahead> -->
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">LlamaIndex</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">LlamaIndex</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">Installation and Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/starter_example.html">Starter Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../primer.html">A Primer to using LlamaIndex</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../primer/usage_pattern.html">LlamaIndex Usage Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../primer/index_guide.html">How Each Index Works</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../tutorials.html">Tutorials</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="building_a_chatbot.html">💬🤖 How to Build a Chatbot</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">A Guide to Building a Full-Stack Web App with LLamaIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_guide.html">A Guide to LlamaIndex + Structured Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="terms_definitions_tutorial.html">A Guide to Extracting Terms and Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graph.html">A Guide to Creating a Unified Query Framework over your Indexes</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://medium.com/@jerryjliu98/how-unstructured-and-llamaindex-can-help-bring-the-power-of-llms-to-your-own-data-3657d063e30d">SEC 10k Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Notebooks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Use Cases</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../use_cases/queries.html">Queries over your Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../use_cases/apps.html">Integrations into LLM Applications</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Key Components</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to/data_connectors.html">Data Connectors (LlamaHub 🦙)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/indices.html">Index Structures</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../primer/index_guide.html">How Each Index Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/update.html">Updating an Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/composability.html">Composability</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/query_interface.html">Query Interface</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../primer/usage_pattern.html">LlamaIndex Usage Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/index_structs/composability.html">Composability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/query/query_transformations.html">Query Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/query/node_postprocessor.html">Node Postprocessor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/customization.html">Customization</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/custom_llms.html">Defining LLMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/custom_prompts.html">Defining Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/customization/embeddings.html">Embedding support</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/analysis.html">Analysis and Optimization</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/cost_analysis.html">Cost Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/playground.html">Playground</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/analysis/optimizers.html">Optimizers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to/output_parsing.html">Output Parsing</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how_to/integrations.html">Integrations</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/vector_stores.html">Using Vector Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/chatgpt_plugins.html">ChatGPT Plugin Integrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to/integrations/using_with_langchain.html">Using with Langchain 🦜🔗</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/indices.html">Indices</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/list.html">List Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/table.html">Table Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/tree.html">Tree Index</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../reference/indices/vector_store.html">Vector Store Index</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/indices/vector_stores/stores.html">Vector Stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/indices/vector_stores/base_index.html">Base Vector Index class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/struct_store.html">Structured Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/kg.html">Knowledge Graph Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/empty.html">Empty Index</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/query.html">Querying an Index</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/list_query.html">Querying a List Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/table_query.html">Querying a Keyword Table Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/tree_query.html">Querying a Tree Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/vector_store_query.html">Querying a Vector Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/struct_store_query.html">Querying a Structured Store Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/kg_query.html">Querying a Knowledge Graph Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/empty_query.html">Querying an Empty Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/indices/composability_query.html">Composable Queries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/node.html">Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/node_postprocessor.html">Node Postprocessor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/docstore.html">Docstore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/composability.html">Composability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/readers.html">Data Connectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/prompts.html">Prompt Templates</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/service_context.html">Service Context</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/embeddings.html">Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/llm_predictor.html">LLMPredictor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/prompt_helper.html">PromptHelper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/service_context/llama_logger.html">Llama Logger 🪵</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/struct_store.html">Structured Index Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/response.html">Response</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/playground.html">Playground</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/node_parser.html">Node Parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/example_notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/langchain_integrations/base.html">Langchain Integrations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/app_showcase.html">😎 App Showcase</a></li>
+</ul>
+
+</div>
+
+<div
+  id="furo-sidebar-ad-placement"
+  class="flat"
+  data-ea-publisher="readthedocs"
+  data-ea-type="readthedocs-sidebar"
+  data-ea-manual="true"
+></div>
+</div>
+
+<div id="furo-readthedocs-versions" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" tabindex="0">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book">&nbsp;</span>
+    v: stable
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Versions</dt>
+      
+        <dd><a href="/en/latest/">latest</a></dd>
+      
+        <dd><a href="/en/stable/">stable</a></dd>
+      
+    </dl>
+    <dl>
+      <dt>Downloads</dt>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/pdf/">pdf</a></dd>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/htmlzip/">html</a></dd>
+      
+        <dd><a href="//gpt-index.readthedocs.io/_/downloads/en/stable/epub/">epub</a></dd>
+      
+    </dl>
+    <dl>
+      
+      <dt>On Read the Docs</dt>
+        <dd>
+          <a href="//readthedocs.org/projects/gpt-index/?fromdocs=gpt-index">Project Home</a>
+        </dd>
+        <dd>
+          <a href="//readthedocs.org/builds/gpt-index/?fromdocs=gpt-index">Builds</a>
+        </dd>
+    </dl>
+  </div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+
+  
+  <div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/jerryjliu/gpt_index/edit/9e4d0e9faa6cba99d9baa95321427007cea7e70f/docs/guides/tutorials/fullstack_app_guide.md" title="Edit this page">
+    <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+      <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+    </svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="section" id="a-guide-to-building-a-full-stack-web-app-with-llamaindex">
+<h1>A Guide to Building a Full-Stack Web App with LLamaIndex<a class="headerlink" href="#a-guide-to-building-a-full-stack-web-app-with-llamaindex" title="Permalink to this heading"></a></h1>
+<p>LlamaIndex is a python library, which means that integrating it with a full-stack web application will be a little different than what you might be used to.</p>
+<p>This guide seeks to walk through the steps needed to create a basic API service written in python, and how this interacts with a TypeScript+React frontend.</p>
+<p>All code examples here are available from the <a class="reference external" href="https://github.com/logan-markewich/llama_index_starter_pack/tree/main/flask_react">llama_index_starter_pack</a> in the flask_react folder.</p>
+<p>The main technologies used in this guide are as follows:</p>
+<ul class="simple">
+<li><p>python3.11</p></li>
+<li><p>llama_index</p></li>
+<li><p>flask</p></li>
+<li><p>typescript</p></li>
+<li><p>react</p></li>
+</ul>
+<div class="section" id="flask-backend">
+<h2>Flask Backend<a class="headerlink" href="#flask-backend" title="Permalink to this heading"></a></h2>
+<p>For this guide, our backend will use a <a class="reference external" href="https://flask.palletsprojects.com/en/2.2.x/">Flask</a> API server to communicate with our frontend code. If you prefer, you can also easily translate this to a <a class="reference external" href="https://fastapi.tiangolo.com/">FastAPI</a> server, or any other python server library of your choice.</p>
+<p>Setting up a server using Flask is easy. You import the package, create the app object, and then create your endpoints. Let’s create a basic skeleton for the server first:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">home</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Hello World!&quot;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5601</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>flask_demo.py</em></p>
+<p>If you run this file (<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">flask_demo.py</span></code>), it will launch a server on port 5601. If you visit <code class="docutils literal notranslate"><span class="pre">http://localhost:5601/</span></code>, you will see the “Hello World!” text rendered in your browser. Nice!</p>
+<p>The next step is deciding what functions we want to include in our server, and to start using LlamaIndex.</p>
+<p>To keep things simple, the most basic operation we can provide is querying an existing index. Using the <a class="reference external" href="https://github.com/jerryjliu/llama_index/blob/main/examples/paul_graham_essay/data/paul_graham_essay.txt">paul graham essay</a> from LlamaIndex, create a documents folder and download+place the essay text file inside of it.</p>
+<div class="section" id="basic-flask-handling-user-index-queries">
+<h3>Basic Flask - Handling User Index Queries<a class="headerlink" href="#basic-flask-handling-user-index-queries" title="Permalink to this heading"></a></h3>
+<p>Now, let’s write some code to initialize our index:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">llama_index</span> <span class="kn">import</span> <span class="n">SimpleDirectoryReader</span><span class="p">,</span> <span class="n">GPTSimpleVectorIndex</span>
+
+<span class="c1"># NOTE: for local testing only, do NOT deploy with your key hardcoded</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;OPENAI_API_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;your key here&quot;</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">initialize_index</span><span class="p">():</span>
+  <span class="k">global</span> <span class="n">index</span>
+   <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">index_name</span><span class="p">):</span>
+      <span class="n">index</span> <span class="o">=</span> <span class="n">GPTSimpleVectorIndex</span><span class="o">.</span><span class="n">load_from_disk</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+      <span class="n">documents</span> <span class="o">=</span> <span class="n">SimpleDirectoryReader</span><span class="p">(</span><span class="s2">&quot;./documents&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+      <span class="n">index</span> <span class="o">=</span> <span class="n">GPTSimpleVectorIndex</span><span class="o">.</span><span class="n">from_documents</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+      <span class="n">index</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This function will initialize our index. If we call this just before starting the flask server in the <code class="docutils literal notranslate"><span class="pre">main</span></code> function, then our index will be ready for user queries!</p>
+<p>Our query endpoint will accept <code class="docutils literal notranslate"><span class="pre">GET</span></code> requests with the query text as a parameter. Here’s what the full endpoint function will look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">request</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/query&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">query_index</span><span class="p">():</span>
+  <span class="k">global</span> <span class="n">index</span>
+  <span class="n">query_text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">query_text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;No text found, please include a ?text=blah parameter in the URL&quot;</span><span class="p">,</span> <span class="mi">400</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query_text</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">),</span> <span class="mi">200</span>
+</pre></div>
+</div>
+<p>Now, we’ve introduced a few new concepts to our server:</p>
+<ul class="simple">
+<li><p>a new <code class="docutils literal notranslate"><span class="pre">/query</span></code> endpoint, defined by the function decorator</p></li>
+<li><p>a new import from flask, <code class="docutils literal notranslate"><span class="pre">request</span></code>, which is used to get parameters from the request</p></li>
+<li><p>if the <code class="docutils literal notranslate"><span class="pre">text</span></code> parameter is missing, then we return an error message and an appropriate HTML response code</p></li>
+<li><p>otherwise, we query the index, and return the response as a string</p></li>
+</ul>
+<p>A full query example that you can test in your browser might look something like this: <code class="docutils literal notranslate"><span class="pre">http://localhost:5601/query?text=what</span> <span class="pre">did</span> <span class="pre">the</span> <span class="pre">author</span> <span class="pre">do</span> <span class="pre">growing</span> <span class="pre">up</span></code> (once you press enter, the browser will convert the spaces into “%20” characters).</p>
+<p>Things are looking pretty good! We now have a functional API. Using your own documents, you can easily provide an interface for any application to call the flask API and get answers to queries.</p>
+</div>
+<div class="section" id="advanced-flask-handling-user-document-uploads">
+<h3>Advanced Flask - Handling User Document Uploads<a class="headerlink" href="#advanced-flask-handling-user-document-uploads" title="Permalink to this heading"></a></h3>
+<p>Things are looking pretty cool, but how can we take this a step further? What if we want to allow users to build their own indexes by uploading their own documents? Have no fear, Flask can handle it all :muscle:.</p>
+<p>To let users upload documents, we have to take some extra precautions. Instead of querying an existing index, the index will become <strong>mutable</strong>. If you have many users adding to the same index, we need to think about how to handle concurrency. Our Flask server is threaded, which means multiple users can ping the server with requests which will be handled at the same time.</p>
+<p>One option might be to create an index for each user or group, and store and fetch things from S3. But for this example, we will assume there is one locally stored index that users are interacting with.</p>
+<p>To handle concurrent uploads and ensure sequential inserts into the index, we can use the <code class="docutils literal notranslate"><span class="pre">BaseManager</span></code> python package to provide sequential access to the index using a separate server and locks. This sounds scary, but it’s not so bad! We will just move all our index operations (initializing, querying, inserting) into the <code class="docutils literal notranslate"><span class="pre">BaseManager</span></code> “index_server”, which will be called from our Flask server.</p>
+<p>Here’s a basic example of what our <code class="docutils literal notranslate"><span class="pre">index_server.py</span></code> will look like after we’ve moved our code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Lock</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.managers</span> <span class="kn">import</span> <span class="n">BaseManager</span>
+<span class="kn">from</span> <span class="nn">llama_index</span> <span class="kn">import</span> <span class="n">SimpleDirectoryReader</span><span class="p">,</span> <span class="n">GPTSimpleVectorIndex</span><span class="p">,</span> <span class="n">Document</span>
+
+<span class="c1"># NOTE: for local testing only, do NOT deploy with your key hardcoded</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;OPENAI_API_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;your key here&quot;</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">initialize_index</span><span class="p">():</span>
+  <span class="k">global</span> <span class="n">index</span>
+
+  <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+    <span class="c1"># same as before ...</span>
+  <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">query_index</span><span class="p">(</span><span class="n">query_text</span><span class="p">):</span>
+  <span class="k">global</span> <span class="n">index</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query_text</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># init the global index</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;initializing index...&quot;</span><span class="p">)</span>
+    <span class="n">initialize_index</span><span class="p">()</span>
+
+    <span class="c1"># setup server</span>
+    <span class="c1"># NOTE: you might want to handle the password in a less hardcoded way</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">BaseManager</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">5602</span><span class="p">),</span> <span class="sa">b</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;query_index&#39;</span><span class="p">,</span> <span class="n">query_index</span><span class="p">)</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_server</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;starting server...&quot;</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><em>index_server.py</em></p>
+<p>So, we’ve moved our functions, introduced the <code class="docutils literal notranslate"><span class="pre">Lock</span></code> object which ensures sequential access to the global index, registered our single function in the server, and started the server on port 5602 with the password <code class="docutils literal notranslate"><span class="pre">password</span></code>.</p>
+<p>Then, we can adjust our flask code as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocessing.managers</span> <span class="kn">import</span> <span class="n">BaseManager</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+
+<span class="c1"># initialize manager connection</span>
+<span class="c1"># NOTE: you might want to handle the password in a less hardcoded way</span>
+<span class="n">manager</span> <span class="o">=</span> <span class="n">BaseManager</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">5602</span><span class="p">),</span> <span class="sa">b</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;query_index&#39;</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/query&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">query_index</span><span class="p">():</span>
+  <span class="k">global</span> <span class="n">index</span>
+  <span class="n">query_text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">query_text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;No text found, please include a ?text=blah parameter in the URL&quot;</span><span class="p">,</span> <span class="mi">400</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">query_index</span><span class="p">(</span><span class="n">query_text</span><span class="p">)</span><span class="o">.</span><span class="n">_getvalue</span><span class="p">()</span>
+  <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">),</span> <span class="mi">200</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">home</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Hello World!&quot;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5601</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p><em>flask_demo.py</em></p>
+<p>The two main changes are connecting to our existing <code class="docutils literal notranslate"><span class="pre">BaseManager</span></code> server and registering the functions, as well as calling the function through the manager in the <code class="docutils literal notranslate"><span class="pre">/query</span></code> endpoint.</p>
+<p>One special thing to note is that <code class="docutils literal notranslate"><span class="pre">BaseManager</span></code> servers don’t return objects quite as we expect. To resolve the return value into it’s original object, we call the <code class="docutils literal notranslate"><span class="pre">_getvalue()</span></code> function.</p>
+<p>If we allow users to upload their own documents, we should probably remove the Paul Graham essay from the documents folder, so let’s do that first. Then, let’s add an endpoint to upload files! First, let’s define our Flask endpoint function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;insert_into_index&#39;</span><span class="p">)</span>
+<span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/uploadFile&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">upload_file</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">manager</span>
+    <span class="k">if</span> <span class="s1">&#39;file&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Please send a POST request with a file&quot;</span><span class="p">,</span> <span class="mi">400</span>
+
+    <span class="n">filepath</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">uploaded_file</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">secure_filename</span><span class="p">(</span><span class="n">uploaded_file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;documents&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">uploaded_file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filename_as_doc_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">manager</span><span class="o">.</span><span class="n">insert_into_index</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">doc_id</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">manager</span><span class="o">.</span><span class="n">insert_into_index</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># cleanup temp file</span>
+        <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;Error: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)),</span> <span class="mi">500</span>
+
+    <span class="c1"># cleanup temp file</span>
+    <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s2">&quot;File inserted!&quot;</span><span class="p">,</span> <span class="mi">200</span>
+</pre></div>
+</div>
+<p>Not too bad! You will notice that we write the file to disk. We could skip this if we only accept basic file formats like <code class="docutils literal notranslate"><span class="pre">txt</span></code> files, but written to disk we can take advantage of LlamaIndex’s <code class="docutils literal notranslate"><span class="pre">SimpleDirectoryReader</span></code> to take care of a bunch of more complex file formats. Optionally, we also use a second <code class="docutils literal notranslate"><span class="pre">POST</span></code> argument to either use the filename as a doc_id or let LlamaIndex generate one for us. This will make more sense once we implement the frontend.</p>
+<p>With these more complicated requests, I also suggest using a tool like <a class="reference external" href="https://www.postman.com/downloads/?utm_source=postman-home">Postman</a>. Examples of using postman to test our endpoints are in the <a class="reference external" href="https://github.com/logan-markewich/llama_index_starter_pack/tree/main/flask_react/postman_examples">repository for this project</a>.</p>
+<p>Lastly, you’ll notice we added a new function to the manager. Let’s implement that inside <code class="docutils literal notranslate"><span class="pre">index_server.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">insert_into_index</span><span class="p">(</span><span class="n">doc_text</span><span class="p">,</span> <span class="n">doc_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">index</span>
+    <span class="n">document</span> <span class="o">=</span> <span class="n">SimpleDirectoryReader</span><span class="p">(</span><span class="n">input_files</span><span class="o">=</span><span class="p">[</span><span class="n">doc_text</span><span class="p">])</span><span class="o">.</span><span class="n">load_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">doc_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">doc_id</span> <span class="o">=</span> <span class="n">doc_id</span>
+
+    <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="n">index</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+        <span class="n">index</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span>
+
+<span class="o">...</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;insert_into_index&#39;</span><span class="p">,</span> <span class="n">insert_into_index</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Easy! If we launch both the <code class="docutils literal notranslate"><span class="pre">index_server.py</span></code> and then the <code class="docutils literal notranslate"><span class="pre">flask_demo.py</span></code> python files, we have a Flask API server that can handle multiple requests to insert documents into a vector index and respond to user queries!</p>
+<p>To support some functionality in the frontend, I’ve adjusted what some responses look like from the Flask API, as well as added some functionality to keep track of which documents are stored in the index (LlamaIndex doesn’t currently support this in a user-friendly way, but we can augment it ourselves!). Lastly, I had to add CORS support to the server using the <code class="docutils literal notranslate"><span class="pre">Flask-cors</span></code> python package.</p>
+<p>Check out the complete <code class="docutils literal notranslate"><span class="pre">flask_demo.py</span></code> and <code class="docutils literal notranslate"><span class="pre">index_server.py</span></code> scripts in the <a class="reference external" href="https://github.com/logan-markewich/llama_index_starter_pack/tree/main/flask_react">repository</a> for the final minor changes, the<code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file, and a sample <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> to help with deployment.</p>
+</div>
+</div>
+<div class="section" id="react-frontend">
+<h2>React Frontend<a class="headerlink" href="#react-frontend" title="Permalink to this heading"></a></h2>
+<p>Generally, React and Typescript are one of the most popular libraries and languages for writing webapps today. This guide will assume you are familiar with how these tools work, because otherwise this guide will triple in length :smile:.</p>
+<p>In the <a class="reference external" href="https://github.com/logan-markewich/llama_index_starter_pack/tree/main/flask_react">repository</a>, the frontend code is organized inside of the <code class="docutils literal notranslate"><span class="pre">react_frontend</span></code> folder.</p>
+<p>The most relevant part of the frontend will be the <code class="docutils literal notranslate"><span class="pre">src/apis</span></code> folder. This is where we make calls to the Flask server, supporting the following queries:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/query</span></code> – make a query to the existing index</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/uploadFile</span></code> – upload a file to the flask server for insertion into the index</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/getDocuments</span></code> – list the current document titles and a portion of their texts</p></li>
+</ul>
+<p>Using these three queries, we can build a robust frontend that allows users to upload and keep track of their files, query the index, and view the query response and information about which text nodes were used to form the response.</p>
+<div class="section" id="fetchdocuments-tsx">
+<h3>fetchDocuments.tsx<a class="headerlink" href="#fetchdocuments-tsx" title="Permalink to this heading"></a></h3>
+<p>This file contains the function to, you guessed it, fetch the list of current documents in the index. The code is as follows:</p>
+<div class="highlight-typescript notranslate"><div class="highlight"><pre><span></span><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">Document</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">fetchDocuments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">Document</span><span class="p">[]</span><span class="o">&gt;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;http://localhost:5601/getDocuments&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cors&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">documentList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">Document</span><span class="p">[];</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">documentList</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>As you can see, we make a query to the Flask server (here, it assumes running on localhost). Notice that we need to include the <code class="docutils literal notranslate"><span class="pre">mode:</span> <span class="pre">'cors'</span></code> option, as we are making an external request.</p>
+<p>Then, we check if the response was ok, and if so, get the response json and return it. Here, the response json is a list of <code class="docutils literal notranslate"><span class="pre">Document</span></code> objects that are defined in the same file.</p>
+</div>
+<div class="section" id="queryindex-tsx">
+<h3>queryIndex.tsx<a class="headerlink" href="#queryindex-tsx" title="Permalink to this heading"></a></h3>
+<p>This file sends the user query to the flask server, and gets the response back, as well as details about which nodes in our index provided the response.</p>
+<div class="highlight-typescript notranslate"><div class="highlight"><pre><span></span><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">ResponseSources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">doc_id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">start</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">end</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">similarity</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">QueryResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">sources</span><span class="o">:</span><span class="w"> </span><span class="kt">ResponseSources</span><span class="p">[];</span>
+<span class="p">};</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">queryIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">query</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">QueryResponse</span><span class="o">&gt;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">queryURL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">URL</span><span class="p">(</span><span class="s2">&quot;http://localhost:5601/query?text=1&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">queryURL</span><span class="p">.</span><span class="nx">searchParams</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">query</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">queryURL</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cors&quot;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Error in query&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sources</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">queryResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">QueryResponse</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">queryResponse</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="nx">queryIndex</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This is similar to the <code class="docutils literal notranslate"><span class="pre">fetchDocuments.tsx</span></code> file, with the main difference being we include the query text as a parameter in the URL. Then, we check if the response is ok and return it with the appropriate typescript type.</p>
+</div>
+<div class="section" id="insertdocument-tsx">
+<h3>insertDocument.tsx<a class="headerlink" href="#insertdocument-tsx" title="Permalink to this heading"></a></h3>
+<p>Probably the most complex API call is uploading a document. The function here accepts a file object and constructs a <code class="docutils literal notranslate"><span class="pre">POST</span></code> request using <code class="docutils literal notranslate"><span class="pre">FormData</span></code>.</p>
+<p>The actual response text is not used in the app but could be utilized to provide some user feedback on if the file failed to upload or not.</p>
+<div class="highlight-typescript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">insertDocument</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">file</span><span class="o">:</span><span class="w"> </span><span class="kt">File</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">formData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">FormData</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">formData</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">formData</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;filename_as_doc_id&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;true&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;http://localhost:5601/uploadFile&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cors&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">body</span><span class="o">:</span><span class="w"> </span><span class="kt">formData</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">responseText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">responseText</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="nx">insertDocument</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="all-the-other-frontend-good-ness">
+<h3>All the Other Frontend Good-ness<a class="headerlink" href="#all-the-other-frontend-good-ness" title="Permalink to this heading"></a></h3>
+<p>And that pretty much wraps up the frontend portion! The rest of the react frontend code is some pretty basic react components, and my best attempt to make it look at least a little nice :smile:.</p>
+<p>I encourage to read the rest of the <a class="reference external" href="https://github.com/logan-markewich/llama_index_starter_pack/tree/main/flask_react/react_frontend">codebase</a> and submit any PRs for improvements!</p>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading"></a></h2>
+<p>This guide has covered a ton of information. We went from a basic “Hello World” Flask server written in python, to a fully functioning LlamaIndex powered backend and how to connect that to a frontend application.</p>
+<p>As you can see, we can easily augment and wrap the services provided by LlamaIndex (like the little external document tracker) to help provide a good user experience on the frontend.</p>
+<p>You could take this and add many features (multi-index/user support, saving objects into S3, adding a Pinecone vector server, etc.). And when you build an app after reading this, be sure to share the final result in the Discord! Good Luck! :muscle:</p>
+</div>
+</div>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="sql_guide.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">A Guide to LlamaIndex + Structured Data</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="building_a_chatbot.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">💬🤖 How to Build a Chatbot</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Jerry Liu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link" href="https://readthedocs.org/projects/gpt-index" aria-label="On Read the Docs">
+                <svg x="0px" y="0px" viewBox="-125 217 360 360" xml:space="preserve">
+                  <path fill="currentColor" d="M39.2,391.3c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3 c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2 c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,391.3,40.4,391.1,39.2,391.3z M39.2,353.6c-4.2,0.6-7.1,4.4-6.5,8.5 c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4 c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,353.6,40.4,353.4,39.2,353.6z M39.2,315.9 c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8 c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6c-30.1-2.4-46.5-7.9-46.5-7.9 C41.7,315.9,40.4,315.8,39.2,315.9z M39.2,278.3c-4.2,0.6-7.1,4.4-6.5,8.5c0.4,3,2.6,5.5,5.5,6.3c0,0,18.5,6.1,50,8.7 c25.3,2.1,54-1.8,54-1.8c4.2-0.1,7.5-3.6,7.4-7.8c-0.1-4.2-3.6-7.5-7.8-7.4c-0.5,0-1,0.1-1.5,0.2c0,0-28.1,3.5-50.9,1.6 c-30.1-2.4-46.5-7.9-46.5-7.9C41.7,278.2,40.4,278.1,39.2,278.3z M-13.6,238.5c-39.6,0.3-54.3,12.5-54.3,12.5v295.7 c0,0,14.4-12.4,60.8-10.5s55.9,18.2,112.9,19.3s71.3-8.8,71.3-8.8l0.8-301.4c0,0-25.6,7.3-75.6,7.7c-49.9,0.4-61.9-12.7-107.7-14.2 C-8.2,238.6-10.9,238.5-13.6,238.5z M19.5,257.8c0,0,24,7.9,68.3,10.1c37.5,1.9,75-3.7,75-3.7v267.9c0,0-19,10-66.5,6.6 C59.5,536.1,19,522.1,19,522.1L19.5,257.8z M-3.6,264.8c4.2,0,7.7,3.4,7.7,7.7c0,4.2-3.4,7.7-7.7,7.7c0,0-12.4,0.1-20,0.8 c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,0,0,0,0c0,0,11.3-6,27-7.5 C-16,264.9-3.6,264.8-3.6,264.8z M-11,302.6c4.2-0.1,7.4,0,7.4,0c4.2,0.5,7.2,4.3,6.7,8.5c-0.4,3.5-3.2,6.3-6.7,6.7 c0,0-12.4,0.1-20,0.8c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,11.3-6,27-7.5 C-20.5,302.9-15.2,302.7-11,302.6z M-3.6,340.2c4.2,0,7.7,3.4,7.7,7.7s-3.4,7.7-7.7,7.7c0,0-12.4-0.1-20,0.7 c-12.7,1.3-21.4,5.9-21.4,5.9c-3.7,2-8.4,0.5-10.3-3.2c-2-3.7-0.5-8.4,3.2-10.3c0,0,11.3-6,27-7.5C-16,340.1-3.6,340.2-3.6,340.2z" />
+                </svg>
+              </a><a class="muted-link" href="https://github.com/jerryjliu/gpt_index" aria-label="On GitHub">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">A Guide to Building a Full-Stack Web App with LLamaIndex</a><ul>
+<li><a class="reference internal" href="#flask-backend">Flask Backend</a><ul>
+<li><a class="reference internal" href="#basic-flask-handling-user-index-queries">Basic Flask - Handling User Index Queries</a></li>
+<li><a class="reference internal" href="#advanced-flask-handling-user-document-uploads">Advanced Flask - Handling User Document Uploads</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#react-frontend">React Frontend</a><ul>
+<li><a class="reference internal" href="#fetchdocuments-tsx">fetchDocuments.tsx</a></li>
+<li><a class="reference internal" href="#queryindex-tsx">queryIndex.tsx</a></li>
+<li><a class="reference internal" href="#insertdocument-tsx">insertDocument.tsx</a></li>
+<li><a class="reference internal" href="#all-the-other-frontend-good-ness">All the Other Frontend Good-ness</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script async="async" src="/_/static/javascript/readthedocs-doc-embed.js"></script>
+    <script src="../../_static/js/mendablesearch.js"></script>
+    </body>
+</html>
